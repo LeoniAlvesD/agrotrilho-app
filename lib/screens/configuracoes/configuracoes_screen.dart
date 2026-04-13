@@ -14,15 +14,18 @@ class ConfiguracoesScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 8),
-          Text('Configurações', style: theme.textTheme.headlineSmall),
-          const SizedBox(height: 20),
+          SizedBox(height: AppSpacing.sm),
+          Semantics(
+            header: true,
+            child: Text('Configurações', style: theme.textTheme.headlineSmall),
+          ),
+          SizedBox(height: AppSpacing.xl),
           _buildProfileCard(context),
-          const SizedBox(height: 16),
+          SizedBox(height: AppSpacing.lg),
           _buildSettingsSection(context),
-          const SizedBox(height: 16),
+          SizedBox(height: AppSpacing.lg),
           _buildAboutSection(context),
-          const SizedBox(height: 16),
+          SizedBox(height: AppSpacing.lg),
         ],
       ),
     );
@@ -34,7 +37,7 @@ class ConfiguracoesScreen extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.lg),
         child: Row(
           children: [
             Container(
@@ -42,15 +45,16 @@ class ConfiguracoesScreen extends StatelessWidget {
               height: 64,
               decoration: BoxDecoration(
                 color: colorScheme.primary.withAlpha(25),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppSpacing.lg),
               ),
               child: Icon(
                 Icons.person,
                 color: colorScheme.primary,
                 size: 36,
+                semanticLabel: 'Foto do perfil',
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: AppSpacing.lg),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +63,7 @@ class ConfiguracoesScreen extends StatelessWidget {
                     AppStrings.producerName,
                     style: theme.textTheme.titleMedium,
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: AppSpacing.xs),
                   Text(
                     AppStrings.producerEmail,
                     style: theme.textTheme.bodyMedium?.copyWith(
@@ -69,7 +73,8 @@ class ConfiguracoesScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.edit, color: colorScheme.onSurfaceVariant),
+            Icon(Icons.edit, color: colorScheme.onSurfaceVariant,
+                semanticLabel: 'Editar perfil'),
           ],
         ),
       ),
@@ -77,8 +82,6 @@ class ConfiguracoesScreen extends StatelessWidget {
   }
 
   Widget _buildSettingsSection(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Card(
       child: Column(
         children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/constants.dart';
 import '../utils/responsive_helper.dart';
 
 class ResponsiveGrid extends StatelessWidget {
@@ -9,8 +10,8 @@ class ResponsiveGrid extends StatelessWidget {
   const ResponsiveGrid({
     super.key,
     required this.children,
-    this.spacing = 12,
-    this.runSpacing = 12,
+    this.spacing = AppSpacing.md,
+    this.runSpacing = AppSpacing.md,
   });
 
   @override
@@ -23,8 +24,9 @@ class ResponsiveGrid extends StatelessWidget {
         builder: (context, constraints) {
           final totalSpacing = spacing * (columns - 1);
           final availableWidth = constraints.maxWidth - totalSpacing;
-          final itemWidth =
-              availableWidth > 0 ? availableWidth / columns : constraints.maxWidth;
+          final itemWidth = availableWidth > 0
+              ? availableWidth / columns
+              : constraints.maxWidth;
 
           return Wrap(
             spacing: spacing,

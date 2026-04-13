@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/constants.dart';
 import '../utils/responsive_helper.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/app_bottom_nav.dart';
@@ -19,7 +20,7 @@ class _RootScreenState extends State<RootScreen> {
   int _selectedIndex = 0;
 
   static const _titles = [
-    'Agrotrilho',
+    AppStrings.appName,
     'Animais',
     'Scanner',
     'Relatórios',
@@ -71,8 +72,9 @@ class _RootScreenState extends State<RootScreen> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.agriculture, size: 28),
-            const SizedBox(width: 8),
+            Icon(Icons.agriculture, size: 28,
+                semanticLabel: AppStrings.appName),
+            SizedBox(width: AppSpacing.sm),
             Text(_titles[_selectedIndex]),
           ],
         ),
@@ -95,11 +97,13 @@ class _RootScreenState extends State<RootScreen> {
               indicatorColor: colorScheme.primary.withAlpha(30),
               leading: isDesktop
                   ? Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: EdgeInsets.symmetric(
+                          vertical: AppSpacing.sm),
                       child: Icon(
                         Icons.agriculture,
                         size: 36,
                         color: colorScheme.primary,
+                        semanticLabel: AppStrings.appName,
                       ),
                     )
                   : null,
@@ -134,9 +138,15 @@ class _RootScreenState extends State<RootScreen> {
           if (!isMobile) const VerticalDivider(thickness: 1, width: 1),
           Expanded(
             child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 250),
+              duration: const Duration(milliseconds: 300),
               switchInCurve: Curves.easeInOut,
               switchOutCurve: Curves.easeInOut,
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
               child: KeyedSubtree(
                 key: ValueKey(_selectedIndex),
                 child: _buildBody(),
@@ -171,8 +181,9 @@ class _ScannerPlaceholder extends StatelessWidget {
             Icons.qr_code_scanner,
             size: 80,
             color: colorScheme.onSurfaceVariant.withAlpha(80),
+            semanticLabel: 'Scanner QR Code',
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: AppSpacing.lg),
           Text(
             'Toque no botão Scanner para abrir a câmera',
             style: theme.textTheme.bodyLarge?.copyWith(
