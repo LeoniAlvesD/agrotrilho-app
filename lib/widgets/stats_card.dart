@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/constants.dart';
 
 class StatsCard extends StatelessWidget {
   final String title;
@@ -17,14 +18,15 @@ class StatsCard extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(Icons.bar_chart, color: colorScheme.primary),
-                const SizedBox(width: 8),
+                Icon(Icons.bar_chart, color: colorScheme.primary,
+                    semanticLabel: title),
+                SizedBox(width: AppSpacing.sm),
                 Text(title, style: theme.textTheme.titleMedium),
               ],
             ),

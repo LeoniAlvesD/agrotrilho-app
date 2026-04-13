@@ -34,49 +34,64 @@ class DashboardScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 8),
-              Text(
-                'Olá, ${AppStrings.producerName}!',
-                style: theme.textTheme.headlineSmall,
+              SizedBox(height: AppSpacing.sm),
+              Semantics(
+                header: true,
+                child: Text(
+                  '${AppStrings.greeting}, ${AppStrings.producerName}!',
+                  style: theme.textTheme.headlineSmall,
+                ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: AppSpacing.xs),
               Text(
-                'Resumo do seu rebanho',
+                AppStrings.dashboardSubtitle,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: AppSpacing.xl),
               ResponsiveGrid(
                 children: [
                   DashboardCard(
                     icon: Icons.pets,
-                    title: 'Total de Animais',
+                    title: AppStrings.totalAnimais,
                     value: '$totalAnimais',
                     color: colorScheme.primary,
+                    semanticLabel:
+                        '${AppStrings.totalAnimais}: $totalAnimais',
                   ),
                   DashboardCard(
                     icon: Icons.monitor_weight,
-                    title: 'Peso Total (kg)',
+                    title: AppStrings.pesoTotal,
                     value: pesoTotal.toStringAsFixed(1),
                     color: AppColors.accent,
+                    semanticLabel:
+                        '${AppStrings.pesoTotal}: ${pesoTotal.toStringAsFixed(1)}',
                   ),
                   DashboardCard(
                     icon: Icons.calendar_today,
-                    title: 'Idade Média (meses)',
+                    title: AppStrings.idadeMedia,
                     value: idadeMedia,
-                    color: Colors.blue,
+                    color: AppColors.info,
+                    semanticLabel:
+                        '${AppStrings.idadeMedia}: $idadeMedia',
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
-              ElevatedButton.icon(
-                onPressed: () => _abrirCadastro(context, service),
-                icon: const Icon(Icons.add),
-                label: const Text('Cadastrar Novo Animal'),
+              SizedBox(height: AppSpacing.xxl),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () => _abrirCadastro(context, service),
+                  icon: const Icon(Icons.add),
+                  label: Text(AppStrings.cadastrarAnimal),
+                ),
               ),
-              const SizedBox(height: 24),
-              if (animais.isNotEmpty) _buildRecentAnimals(context, animais),
+              SizedBox(height: AppSpacing.xxl),
+              if (animais.isNotEmpty)
+                _buildRecentAnimals(context, animais)
+              else
+                _buildEmptyState(context),
             ],
           ),
         );
@@ -95,6 +110,41 @@ class DashboardScreen extends StatelessWidget {
     }
   }
 
+  Widget _buildEmptyState(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.xxxl),
+        child: Column(
+          children: [
+            Icon(
+              Icons.pets,
+              size: 80,
+              color: colorScheme.onSurfaceVariant.withAlpha(80),
+              semanticLabel: AppStrings.nenhumAnimal,
+            ),
+            SizedBox(height: AppSpacing.lg),
+            Text(
+              AppStrings.nenhumAnimal,
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+            SizedBox(height: AppSpacing.sm),
+            Text(
+              AppStrings.toqueNovo,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant.withAlpha(180),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildRecentAnimals(BuildContext context, List<Animal> animais) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -102,16 +152,18 @@ class DashboardScreen extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                Icon(Icons.history, color: colorScheme.primary),
-                const SizedBox(width: 8),
+                Icon(Icons.history,
+                    color: colorScheme.primary,
+                    semanticLabel: AppStrings.animaisRecentes),
+                SizedBox(width: AppSpacing.sm),
                 Text(
-                  'Animais Recentes',
+                  AppStrings.animaisRecentes,
                   style: theme.textTheme.titleMedium,
                 ),
               ],
@@ -131,6 +183,7 @@ class DashboardScreen extends StatelessWidget {
                     Icons.pets,
                     color: colorScheme.primary,
                     size: 24,
+                    semanticLabel: animal.nome,
                   ),
                 ),
                 title: Text(animal.nome),

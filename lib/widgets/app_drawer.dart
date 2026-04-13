@@ -35,31 +35,34 @@ class AppDrawer extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = _items[index];
                 final isSelected = index == selectedIndex;
-                return ListTile(
-                  leading: Icon(
-                    item.icon,
-                    color: isSelected
-                        ? colorScheme.primary
-                        : colorScheme.onSurfaceVariant,
-                  ),
-                  title: Text(
-                    item.label,
-                    style: TextStyle(
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
+                return Semantics(
+                  selected: isSelected,
+                  child: ListTile(
+                    leading: Icon(
+                      item.icon,
                       color: isSelected
                           ? colorScheme.primary
-                          : colorScheme.onSurface,
+                          : colorScheme.onSurfaceVariant,
                     ),
+                    title: Text(
+                      item.label,
+                      style: TextStyle(
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
+                        color: isSelected
+                            ? colorScheme.primary
+                            : colorScheme.onSurface,
+                      ),
+                    ),
+                    selected: isSelected,
+                    selectedTileColor: colorScheme.primary.withAlpha(20),
+                    onTap: () {
+                      onItemSelected(index);
+                      if (Scaffold.of(context).isDrawerOpen) {
+                        Navigator.pop(context);
+                      }
+                    },
                   ),
-                  selected: isSelected,
-                  selectedTileColor: colorScheme.primary.withAlpha(20),
-                  onTap: () {
-                    onItemSelected(index);
-                    if (Scaffold.of(context).isDrawerOpen) {
-                      Navigator.pop(context);
-                    }
-                  },
                 );
               },
             ),
@@ -88,7 +91,7 @@ class AppDrawer extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: AppSpacing.sm),
         ],
       ),
     );
@@ -107,7 +110,7 @@ class AppDrawer extends StatelessWidget {
             height: 56,
             decoration: BoxDecoration(
               color: Colors.white.withAlpha(50),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppSpacing.lg),
             ),
             child: const Icon(
               Icons.agriculture,
@@ -115,7 +118,7 @@ class AppDrawer extends StatelessWidget {
               size: 36,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: AppSpacing.md),
           const Text(
             AppStrings.appName,
             style: TextStyle(
@@ -124,7 +127,7 @@ class AppDrawer extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 4),
+          SizedBox(height: AppSpacing.xs),
           Text(
             AppStrings.producerName,
             style: TextStyle(

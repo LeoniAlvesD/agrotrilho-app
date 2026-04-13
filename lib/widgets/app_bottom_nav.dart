@@ -23,27 +23,32 @@ class AppBottomNav extends StatelessWidget {
           icon: const Icon(Icons.dashboard_outlined),
           selectedIcon: Icon(Icons.dashboard, color: colorScheme.primary),
           label: 'Home',
+          tooltip: 'Ir para Home',
         ),
         NavigationDestination(
           icon: const Icon(Icons.pets_outlined),
           selectedIcon: Icon(Icons.pets, color: colorScheme.primary),
           label: 'Animais',
+          tooltip: 'Ver animais',
         ),
         NavigationDestination(
           icon: const Icon(Icons.qr_code_scanner_outlined),
           selectedIcon:
               Icon(Icons.qr_code_scanner, color: colorScheme.primary),
           label: 'Scanner',
+          tooltip: 'Abrir scanner QR',
         ),
         NavigationDestination(
           icon: const Icon(Icons.bar_chart_outlined),
           selectedIcon: Icon(Icons.bar_chart, color: colorScheme.primary),
           label: 'Relatórios',
+          tooltip: 'Ver relatórios',
         ),
         NavigationDestination(
           icon: const Icon(Icons.settings_outlined),
           selectedIcon: Icon(Icons.settings, color: colorScheme.primary),
           label: 'Config',
+          tooltip: 'Configurações',
         ),
       ],
     );
