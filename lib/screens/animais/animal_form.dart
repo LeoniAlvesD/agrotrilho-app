@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import '../models/animal.dart';
-import '../utils/constants.dart';
-import '../utils/validators.dart';
+import '../../models/animal.dart';
+import '../../utils/constants.dart';
+import '../../utils/validators.dart';
 
-class CadastroAnimal extends StatefulWidget {
+class AnimalForm extends StatefulWidget {
   final Animal? animal;
 
-  const CadastroAnimal({super.key, this.animal});
+  const AnimalForm({super.key, this.animal});
 
   @override
-  State<CadastroAnimal> createState() => _CadastroAnimalState();
+  State<AnimalForm> createState() => _AnimalFormState();
 }
 
-class _CadastroAnimalState extends State<CadastroAnimal> {
+class _AnimalFormState extends State<AnimalForm> {
   final _formKey = GlobalKey<FormState>();
   final nomeController = TextEditingController();
   final idadeController = TextEditingController();
