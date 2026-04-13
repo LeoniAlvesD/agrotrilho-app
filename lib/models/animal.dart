@@ -14,23 +14,45 @@ class Animal {
   final String qrCodeData;
   String? nfcTagId;
 
-  Animal({
-    String? id,
+  Animal._({
+    required this.id,
     required this.nome,
     required this.idade,
     required this.peso,
     this.observacoes = '',
     this.status = 'Ativo',
+    required this.dataCadastro,
+    required this.qrCodeData,
+    this.nfcTagId,
+  });
+
+  /// Construtor principal que garante consistência entre ID e QR Code
+  factory Animal({
+    String? id,
+    required String nome,
+    required int idade,
+    required double peso,
+    String observacoes = '',
+    String status = 'Ativo',
     DateTime? dataCadastro,
     String? qrCodeData,
-    this.nfcTagId,
-  })  : id = id ?? const Uuid().v4(),
-        dataCadastro = dataCadastro ?? DateTime.now(),
-        qrCodeData = qrCodeData ??
-            '${AppMessages.qrCodePrefix}${id ?? ''}';
+    String? nfcTagId,
+  }) {
+    final resolvedId = id ?? const Uuid().v4();
+    return Animal._(
+      id: resolvedId,
+      nome: nome,
+      idade: idade,
+      peso: peso,
+      observacoes: observacoes,
+      status: status,
+      dataCadastro: dataCadastro ?? DateTime.now(),
+      qrCodeData: qrCodeData ?? '${AppMessages.qrCodePrefix}$resolvedId',
+      nfcTagId: nfcTagId,
+    );
+  }
 
-  /// Inicializa o QR Code com o ID correto após construção
-  /// Use o factory constructor `criar` para garantir consistência
+  /// Factory constructor para criar novos animais (alias conveniente)
   factory Animal.criar({
     required String nome,
     required int idade,
@@ -39,15 +61,12 @@ class Animal {
     String status = 'Ativo',
     String? nfcTagId,
   }) {
-    final id = const Uuid().v4();
     return Animal(
-      id: id,
       nome: nome,
       idade: idade,
       peso: peso,
       observacoes: observacoes,
       status: status,
-      qrCodeData: '${AppMessages.qrCodePrefix}$id',
       nfcTagId: nfcTagId,
     );
   }
@@ -63,8 +82,13 @@ class Animal {
     return '$idade ${idade == 1 ? 'mês' : 'meses'}';
   }
 
-  /// Retorna o peso formatado (ex: "450.5 kg")
-  String get pesoFormatado => '${peso.toStringAsFixed(1)} kg';
+  /// Retorna o peso formatado (ex: "450.5 kg" ou "200 kg")
+  String get pesoFormatado {
+    if (peso == peso.truncateToDouble()) {
+      return '${peso.toInt()} kg';
+    }
+    return '${peso.toStringAsFixed(1)} kg';
+  }
 
   /// Retorna a data de cadastro formatada (ex: "13/04/2026")
   String get dataCadastroFormatada =>
@@ -79,7 +103,7 @@ class Animal {
     String? status,
     String? nfcTagId,
   }) {
-    return Animal(
+    return Animal._(
       id: id,
       nome: nome ?? this.nome,
       idade: idade ?? this.idade,

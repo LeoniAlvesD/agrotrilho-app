@@ -17,6 +17,11 @@ void main() {
       expect(animal.qrCodeData, 'agrotrilho://animal/${animal.id}');
     });
 
+    test('constructor sem ID gera QR Code consistente com ID', () {
+      final animal = Animal(nome: 'Test', idade: 6, peso: 100.0);
+      expect(animal.qrCodeData, 'agrotrilho://animal/${animal.id}');
+    });
+
     test('formata idade corretamente', () {
       expect(Animal(nome: 'A', idade: 6, peso: 100).idadeFormatada, '6 meses');
       expect(Animal(nome: 'A', idade: 1, peso: 100).idadeFormatada, '1 mês');
@@ -30,6 +35,7 @@ void main() {
 
     test('formata peso corretamente', () {
       expect(Animal(nome: 'A', idade: 12, peso: 450.5).pesoFormatado, '450.5 kg');
+      expect(Animal(nome: 'A', idade: 12, peso: 200.0).pesoFormatado, '200 kg');
     });
 
     test('copyWith mantém campos não alterados', () {
