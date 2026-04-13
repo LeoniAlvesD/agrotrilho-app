@@ -199,7 +199,9 @@ void main() {
 
     test('should reject nome exceeding max length', () {
       final longName = 'A' * (Validators.maxNomeLength + 1);
-      expect(Validators.validarNome(longName), isNotNull);
+      final result = Validators.validarNome(longName);
+      expect(result, isNotNull);
+      expect(result, contains('máximo'));
     });
 
     test('should validate idade', () {

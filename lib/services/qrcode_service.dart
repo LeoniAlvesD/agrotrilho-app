@@ -22,7 +22,7 @@ class QrCodeService {
     if (valor == null || valor.isEmpty) return false;
 
     // Try JSON format first
-    if (_isValidJson(valor)) return true;
+    if (_tryParseJson(valor) != null) return true;
 
     // Fall back to legacy UUID-only format
     return _isValidUuid(valor);
@@ -36,14 +36,8 @@ class QrCodeService {
     if (valor == null || valor.isEmpty) return null;
 
     // Try JSON format first
-    try {
-      final data = json.decode(valor);
-      if (data is Map<String, dynamic> && data.containsKey('id')) {
-        return data['id'] as String;
-      }
-    } catch (_) {
-      // Not valid JSON – try legacy format
-    }
+    final data = _tryParseJson(valor);
+    if (data != null) return data['id'] as String;
 
     // Fall back to legacy UUID format
     if (_isValidUuid(valor)) return valor;
@@ -51,13 +45,16 @@ class QrCodeService {
     return null;
   }
 
-  static bool _isValidJson(String valor) {
+  static Map<String, dynamic>? _tryParseJson(String valor) {
     try {
       final data = json.decode(valor);
-      return data is Map<String, dynamic> && data.containsKey('id');
+      if (data is Map<String, dynamic> && data.containsKey('id')) {
+        return data;
+      }
     } catch (_) {
-      return false;
+      // Not valid JSON
     }
+    return null;
   }
 
   static bool _isValidUuid(String valor) {
