@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/animal.dart';
+import '../../utils/constants.dart';
 import '../../utils/validators.dart';
 import '../../utils/responsive_helper.dart';
 
@@ -74,13 +75,14 @@ class _AnimalFormState extends State<AnimalForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 8),
+                  SizedBox(height: AppSpacing.sm),
                   Icon(
                     Icons.pets,
                     size: 64,
                     color: colorScheme.primary,
+                    semanticLabel: isEdicao ? 'Editar Animal' : 'Novo Animal',
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: AppSpacing.xxl),
                   TextFormField(
                     controller: nomeController,
                     decoration: const InputDecoration(
@@ -90,7 +92,7 @@ class _AnimalFormState extends State<AnimalForm> {
                     validator: Validators.validarNome,
                     textInputAction: TextInputAction.next,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: AppSpacing.lg),
                   TextFormField(
                     controller: idadeController,
                     decoration: const InputDecoration(
@@ -101,7 +103,7 @@ class _AnimalFormState extends State<AnimalForm> {
                     validator: Validators.validarIdade,
                     textInputAction: TextInputAction.next,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: AppSpacing.lg),
                   TextFormField(
                     controller: pesoController,
                     decoration: const InputDecoration(
@@ -113,7 +115,7 @@ class _AnimalFormState extends State<AnimalForm> {
                     validator: Validators.validarPeso,
                     textInputAction: TextInputAction.next,
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: AppSpacing.lg),
                   TextFormField(
                     controller: observacoesController,
                     decoration: const InputDecoration(
@@ -124,7 +126,7 @@ class _AnimalFormState extends State<AnimalForm> {
                     maxLines: 3,
                     textInputAction: TextInputAction.done,
                   ),
-                  const SizedBox(height: 32),
+                  SizedBox(height: AppSpacing.xxxl),
                   ElevatedButton.icon(
                     onPressed: salvar,
                     icon: Icon(isEdicao ? Icons.check : Icons.save),

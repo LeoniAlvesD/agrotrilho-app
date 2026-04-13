@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:uuid/uuid.dart';
 
 class Animal {
@@ -35,5 +36,23 @@ class Animal {
       peso: (map['peso'] as num).toDouble(),
       observacoes: map['observacoes'] as String? ?? '',
     );
+  }
+
+  /// Alias for [toMap] – used by persistence layer.
+  Map<String, dynamic> toJson() => toMap();
+
+  /// Alias for [fromMap] – used by persistence layer.
+  factory Animal.fromJson(Map<String, dynamic> json) => Animal.fromMap(json);
+
+  /// Convenience: encode a list of animals as a JSON string.
+  static String encodeList(List<Animal> animais) =>
+      json.encode(animais.map((a) => a.toJson()).toList());
+
+  /// Convenience: decode a JSON string into a list of animals.
+  static List<Animal> decodeList(String source) {
+    final List<dynamic> list = json.decode(source) as List<dynamic>;
+    return list
+        .map((e) => Animal.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 }

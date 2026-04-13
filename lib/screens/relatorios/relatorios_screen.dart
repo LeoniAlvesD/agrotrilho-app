@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/animal.dart';
 import '../../services/animal_service.dart';
+import '../../utils/constants.dart';
 import '../../utils/responsive_helper.dart';
 import '../../widgets/stats_card.dart';
 import '../../widgets/stat_widget.dart';
@@ -26,40 +27,41 @@ class RelatoriosScreen extends StatelessWidget {
 
         final maxPeso = animais.isEmpty
             ? 1.0
-            : animais
-                .map((a) => a.peso)
-                .reduce((a, b) => a > b ? a : b);
+            : animais.map((a) => a.peso).reduce((a, b) => a > b ? a : b);
 
         return SingleChildScrollView(
           padding: ResponsiveHelper.getPadding(context),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 8),
-              Text(
-                'Relatórios do Rebanho',
-                style: theme.textTheme.headlineSmall,
+              SizedBox(height: AppSpacing.sm),
+              Semantics(
+                header: true,
+                child: Text(
+                  AppStrings.relatoriosTitulo,
+                  style: theme.textTheme.headlineSmall,
+                ),
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: AppSpacing.xs),
               Text(
-                'Estatísticas e análise dos animais cadastrados',
+                AppStrings.relatoriosSubtitulo,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: AppSpacing.xl),
               StatsCard(
-                title: 'Resumo Geral',
+                title: AppStrings.resumoGeral,
                 children: [
                   _buildSummaryRow(
                     context,
-                    'Total de Animais',
+                    AppStrings.totalAnimais,
                     '$total',
                     Icons.pets,
                   ),
                   _buildSummaryRow(
                     context,
-                    'Peso Total',
+                    AppStrings.pesoTotal,
                     '${pesoTotal.toStringAsFixed(1)} kg',
                     Icons.monitor_weight,
                   ),
@@ -71,16 +73,16 @@ class RelatoriosScreen extends StatelessWidget {
                   ),
                   _buildSummaryRow(
                     context,
-                    'Idade Média',
+                    AppStrings.idadeMedia,
                     '${idadeMedia.toStringAsFixed(1)} meses',
                     Icons.calendar_today,
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: AppSpacing.lg),
               if (animais.isNotEmpty) ...[
                 StatsCard(
-                  title: 'Distribuição por Peso',
+                  title: AppStrings.distribuicaoPeso,
                   children: animais
                       .map(
                         (a) => StatWidget(
@@ -92,33 +94,34 @@ class RelatoriosScreen extends StatelessWidget {
                       )
                       .toList(),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: AppSpacing.lg),
                 StatsCard(
-                  title: 'Distribuição por Idade',
+                  title: AppStrings.distribuicaoIdade,
                   children: _buildIdadeStats(animais),
                 ),
               ],
               if (animais.isEmpty)
                 Center(
                   child: Padding(
-                    padding: const EdgeInsets.all(32),
+                    padding: EdgeInsets.all(AppSpacing.xxxl),
                     child: Column(
                       children: [
                         Icon(
                           Icons.bar_chart,
                           size: 80,
                           color: colorScheme.onSurfaceVariant.withAlpha(80),
+                          semanticLabel: AppStrings.nenhumDado,
                         ),
-                        const SizedBox(height: 16),
+                        SizedBox(height: AppSpacing.lg),
                         Text(
-                          'Nenhum dado para exibir',
+                          AppStrings.nenhumDado,
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: colorScheme.onSurfaceVariant,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: AppSpacing.sm),
                         Text(
-                          'Cadastre animais para ver relatórios',
+                          AppStrings.cadastreAnimais,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color:
                                 colorScheme.onSurfaceVariant.withAlpha(180),
@@ -128,7 +131,7 @@ class RelatoriosScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              const SizedBox(height: 16),
+              SizedBox(height: AppSpacing.lg),
             ],
           ),
         );
@@ -137,16 +140,15 @@ class RelatoriosScreen extends StatelessWidget {
   }
 
   List<Widget> _buildIdadeStats(List<Animal> animais) {
-    final maxIdade = animais
-        .map((a) => a.idade)
-        .reduce((a, b) => a > b ? a : b);
+    final maxIdade =
+        animais.map((a) => a.idade).reduce((a, b) => a > b ? a : b);
     return animais
         .map(
           (a) => StatWidget(
             label: a.nome,
             value: '${a.idade} ${a.idade == 1 ? 'mês' : 'meses'}',
             fraction: maxIdade > 0 ? a.idade / maxIdade : 0,
-            color: Colors.blue,
+            color: AppColors.info,
           ),
         )
         .toList();
@@ -162,11 +164,12 @@ class RelatoriosScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
       child: Row(
         children: [
-          Icon(icon, color: colorScheme.primary, size: 22),
-          const SizedBox(width: 12),
+          Icon(icon, color: colorScheme.primary, size: 22,
+              semanticLabel: label),
+          SizedBox(width: AppSpacing.md),
           Expanded(
             child: Text(
               label,

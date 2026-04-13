@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import '../../utils/constants.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
@@ -60,17 +61,21 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
           Center(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                final scanSize =
-                    constraints.maxWidth < 300 ? constraints.maxWidth - 48 : 250.0;
-                return Container(
-                  width: scanSize,
-                  height: scanSize,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: colorScheme.primary,
-                      width: 3,
+                final scanSize = constraints.maxWidth < 300
+                    ? constraints.maxWidth - 48
+                    : 250.0;
+                return Semantics(
+                  label: 'Área de leitura do QR Code',
+                  child: Container(
+                    width: scanSize,
+                    height: scanSize,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: colorScheme.primary,
+                        width: 3,
+                      ),
+                      borderRadius: BorderRadius.circular(AppSpacing.lg),
                     ),
-                    borderRadius: BorderRadius.circular(16),
                   ),
                 );
               },
@@ -82,11 +87,11 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
             right: 0,
             child: Center(
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xxl, vertical: AppSpacing.md),
                 decoration: BoxDecoration(
                   color: Colors.black54,
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(AppSpacing.xxl),
                 ),
                 child: const Text(
                   'Aponte a câmera para o QR Code',

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/animal.dart';
 import '../../services/animal_service.dart';
+import '../../utils/constants.dart';
 import '../../utils/responsive_helper.dart';
 import '../../widgets/qr_display_widget.dart';
 import 'animal_form.dart';
@@ -89,34 +90,35 @@ class AnimalDetail extends StatelessWidget {
             padding: ResponsiveHelper.getPadding(context),
             child: Column(
               children: [
-                const SizedBox(height: 8),
+                SizedBox(height: AppSpacing.sm),
                 Container(
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
                     color: colorScheme.primary.withAlpha(25),
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(AppSpacing.xl),
                   ),
                   child: Icon(
                     Icons.pets,
                     color: colorScheme.primary,
                     size: 48,
+                    semanticLabel: animal.nome,
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: AppSpacing.lg),
                 Text(
                   animal.nome,
                   style: theme.textTheme.headlineSmall,
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: AppSpacing.xxl),
                 _buildInfoCard(context),
-                const SizedBox(height: 16),
+                SizedBox(height: AppSpacing.lg),
                 if (animal.observacoes.isNotEmpty) ...[
                   _buildObservacoesCard(context),
-                  const SizedBox(height: 16),
+                  SizedBox(height: AppSpacing.lg),
                 ],
                 QrDisplayWidget(data: animal.id),
-                const SizedBox(height: 16),
+                SizedBox(height: AppSpacing.lg),
               ],
             ),
           ),
@@ -131,7 +133,7 @@ class AnimalDetail extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -143,14 +145,14 @@ class AnimalDetail extends StatelessWidget {
               'Peso',
               '${animal.peso} kg',
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: AppSpacing.md),
             _buildInfoRow(
               context,
               Icons.calendar_today,
               'Idade',
               '${animal.idade} ${animal.idade == 1 ? 'mês' : 'meses'}',
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: AppSpacing.md),
             _buildInfoRow(
               context,
               Icons.fingerprint,
@@ -172,25 +174,28 @@ class AnimalDetail extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Row(
-      children: [
-        Icon(icon, color: colorScheme.primary, size: 22),
-        const SizedBox(width: 12),
-        Text(
-          '$label: ',
-          style: theme.textTheme.bodyLarge?.copyWith(
-            color: colorScheme.onSurfaceVariant,
-          ),
-        ),
-        Flexible(
-          child: Text(
-            value,
+    return Semantics(
+      label: '$label: $value',
+      child: Row(
+        children: [
+          Icon(icon, color: colorScheme.primary, size: 22),
+          SizedBox(width: AppSpacing.md),
+          Text(
+            '$label: ',
             style: theme.textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.w600,
+              color: colorScheme.onSurfaceVariant,
             ),
           ),
-        ),
-      ],
+          Flexible(
+            child: Text(
+              value,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -200,14 +205,14 @@ class AnimalDetail extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Icon(Icons.notes, color: colorScheme.primary),
-                const SizedBox(width: 8),
+                SizedBox(width: AppSpacing.sm),
                 Text('Observações', style: theme.textTheme.titleMedium),
               ],
             ),

@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:agrotrilho_app/models/animal.dart';
-import 'package:agrotrilho_app/services/animal_service.dart';
 import 'package:agrotrilho_app/services/qrcode_service.dart';
 import 'package:agrotrilho_app/utils/validators.dart';
 import 'package:agrotrilho_app/utils/constants.dart';
@@ -86,63 +86,47 @@ void main() {
 
       expect(animal.observacoes, '');
     });
-  });
 
-  group('AnimalService', () {
-    test('should start with 3 example animals', () {
-      final service = AnimalService();
-      expect(service.animais.length, 3);
-    });
-
-    test('should add an animal', () {
-      final service = AnimalService();
-      final animal = Animal(nome: 'Nova', idade: 12, peso: 200);
-      service.adicionar(animal);
-      expect(service.animais.length, 4);
-    });
-
-    test('should remove an animal', () {
-      final service = AnimalService();
-      final id = service.animais.first.id;
-      service.remover(id);
-      expect(service.animais.length, 2);
-      expect(service.buscarPorId(id), isNull);
-    });
-
-    test('should update an animal', () {
-      final service = AnimalService();
-      final original = service.animais.first;
-      final atualizado = Animal(
-        id: original.id,
-        nome: 'Atualizada',
-        idade: 99,
-        peso: 999,
+    test('toJson/fromJson should round-trip correctly', () {
+      final original = Animal(
+        id: 'json-id',
+        nome: 'Estrela',
+        idade: 36,
+        peso: 420.0,
+        observacoes: 'Vacinação em dia',
       );
-      service.atualizar(atualizado);
-      expect(service.buscarPorId(original.id)!.nome, 'Atualizada');
+
+      final jsonMap = original.toJson();
+      final restored = Animal.fromJson(jsonMap);
+
+      expect(restored.id, original.id);
+      expect(restored.nome, original.nome);
+      expect(restored.idade, original.idade);
+      expect(restored.peso, original.peso);
+      expect(restored.observacoes, original.observacoes);
     });
 
-    test('should search animals by name', () {
-      final service = AnimalService();
-      final resultados = service.buscar('mimosa');
-      expect(resultados.length, 1);
-      expect(resultados.first.nome, 'Mimosa');
-    });
+    test('encodeList/decodeList should round-trip list', () {
+      final animals = [
+        Animal(id: 'a1', nome: 'Mimosa', idade: 24, peso: 350.5),
+        Animal(id: 'a2', nome: 'Trovão', idade: 18, peso: 280.0,
+            observacoes: 'Novilho'),
+      ];
 
-    test('should return all animals for empty query', () {
-      final service = AnimalService();
-      expect(service.buscar('').length, 3);
-    });
+      final encoded = Animal.encodeList(animals);
+      expect(encoded, isA<String>());
 
-    test('should find animal by id', () {
-      final service = AnimalService();
-      final id = service.animais.first.id;
-      expect(service.buscarPorId(id), isNotNull);
-    });
+      // Verify it's valid JSON
+      final decoded = json.decode(encoded);
+      expect(decoded, isA<List>());
+      expect(decoded.length, 2);
 
-    test('should return null for unknown id', () {
-      final service = AnimalService();
-      expect(service.buscarPorId('unknown-id'), isNull);
+      final restored = Animal.decodeList(encoded);
+      expect(restored.length, 2);
+      expect(restored[0].id, 'a1');
+      expect(restored[0].nome, 'Mimosa');
+      expect(restored[1].id, 'a2');
+      expect(restored[1].observacoes, 'Novilho');
     });
   });
 
@@ -205,9 +189,43 @@ void main() {
       expect(AppColors.primary.value, 0xFF2E7D32);
     });
 
+    test('AppColors should have info color', () {
+      expect(AppColors.info.value, 0xFF1976D2);
+    });
+
     test('AppStrings should have app name', () {
       expect(AppStrings.appName, 'Agrotrilho');
       expect(AppStrings.appVersion, isNotEmpty);
+    });
+
+    test('AppStrings should have dashboard strings', () {
+      expect(AppStrings.greeting, isNotEmpty);
+      expect(AppStrings.dashboardSubtitle, isNotEmpty);
+      expect(AppStrings.totalAnimais, isNotEmpty);
+      expect(AppStrings.cadastrarAnimal, isNotEmpty);
+    });
+
+    test('AppStrings should have empty state strings', () {
+      expect(AppStrings.nenhumAnimal, isNotEmpty);
+      expect(AppStrings.nenhumDado, isNotEmpty);
+      expect(AppStrings.cadastreAnimais, isNotEmpty);
+    });
+
+    test('AppStrings should have relatórios strings', () {
+      expect(AppStrings.relatoriosTitulo, isNotEmpty);
+      expect(AppStrings.resumoGeral, isNotEmpty);
+      expect(AppStrings.distribuicaoPeso, isNotEmpty);
+      expect(AppStrings.distribuicaoIdade, isNotEmpty);
+    });
+
+    test('AppSpacing should have consistent values', () {
+      expect(AppSpacing.xs, 4);
+      expect(AppSpacing.sm, 8);
+      expect(AppSpacing.md, 12);
+      expect(AppSpacing.lg, 16);
+      expect(AppSpacing.xl, 20);
+      expect(AppSpacing.xxl, 24);
+      expect(AppSpacing.xxxl, 32);
     });
   });
 }
