@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'screens/lista_animais.dart';
+import 'screens/root_screen.dart';
 import 'services/animal_service.dart';
 import 'utils/constants.dart';
 
@@ -62,7 +62,7 @@ class AgrotrilhoApp extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
           ),
         ),
-        home: const ListaAnimais(),
+        home: const RootScreen(),
       ),
     );
   }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import '../utils/constants.dart';
+import '../../utils/constants.dart';
 
-class ScannerQrcode extends StatefulWidget {
-  const ScannerQrcode({super.key});
+class QrScannerScreen extends StatefulWidget {
+  const QrScannerScreen({super.key});
 
   @override
-  State<ScannerQrcode> createState() => _ScannerQrcodeState();
+  State<QrScannerScreen> createState() => _QrScannerScreenState();
 }
 
-class _ScannerQrcodeState extends State<ScannerQrcode> {
+class _QrScannerScreenState extends State<QrScannerScreen> {
   final MobileScannerController _controller = MobileScannerController();
   bool _hasScanned = false;
 

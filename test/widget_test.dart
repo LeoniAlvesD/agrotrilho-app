@@ -3,6 +3,8 @@ import 'package:agrotrilho_app/models/animal.dart';
 import 'package:agrotrilho_app/services/animal_service.dart';
 import 'package:agrotrilho_app/services/qrcode_service.dart';
 import 'package:agrotrilho_app/utils/validators.dart';
+import 'package:agrotrilho_app/utils/constants.dart';
+import 'package:agrotrilho_app/utils/responsive_helper.dart';
 
 void main() {
   group('Animal Model', () {
@@ -188,6 +190,24 @@ void main() {
       expect(Validators.validarPeso('-5'), isNotNull);
       expect(Validators.validarPeso('abc'), isNotNull);
       expect(Validators.validarPeso('350.5'), isNull);
+    });
+  });
+
+  group('ResponsiveHelper', () {
+    test('breakpoints should be correctly defined', () {
+      expect(ResponsiveHelper.mobileBreakpoint, 600);
+      expect(ResponsiveHelper.tabletBreakpoint, 1200);
+    });
+  });
+
+  group('AppConstants', () {
+    test('AppColors should have primary color', () {
+      expect(AppColors.primary.value, 0xFF2E7D32);
+    });
+
+    test('AppStrings should have app name', () {
+      expect(AppStrings.appName, 'Agrotrilho');
+      expect(AppStrings.appVersion, isNotEmpty);
     });
   });
 }

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/animal.dart';
-import '../services/animal_service.dart';
-import '../utils/constants.dart';
-import '../widgets/qr_display_widget.dart';
-import 'cadastro_animal.dart';
+import '../../models/animal.dart';
+import '../../services/animal_service.dart';
+import '../../utils/constants.dart';
+import '../../widgets/qr_display_widget.dart';
+import 'animal_form.dart';
 
-class DetalheAnimal extends StatelessWidget {
+class AnimalDetail extends StatelessWidget {
   final Animal animal;
 
-  const DetalheAnimal({super.key, required this.animal});
+  const AnimalDetail({super.key, required this.animal});
 
   void _editarAnimal(BuildContext context) async {
     final atualizado = await Navigator.push<Animal>(
       context,
       MaterialPageRoute(
-        builder: (_) => CadastroAnimal(animal: animal),
+        builder: (_) => AnimalForm(animal: animal),
       ),
     );
 

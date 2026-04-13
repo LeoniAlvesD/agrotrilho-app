@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/animal.dart';
-import '../services/animal_service.dart';
-import '../utils/constants.dart';
-import '../widgets/animal_card.dart';
-import 'cadastro_animal.dart';
-import 'detalhe_animal.dart';
-import 'scanner_qrcode.dart';
+import '../../models/animal.dart';
+import '../../services/animal_service.dart';
+import '../../utils/constants.dart';
+import '../../widgets/animal_card.dart';
+import 'animal_form.dart';
+import 'animal_detail.dart';
 
 class ListaAnimais extends StatefulWidget {
   const ListaAnimais({super.key});
@@ -28,7 +27,7 @@ class _ListaAnimaisState extends State<ListaAnimais> {
   void _abrirCadastro() async {
     final novoAnimal = await Navigator.push<Animal>(
       context,
-      MaterialPageRoute(builder: (_) => const CadastroAnimal()),
+      MaterialPageRoute(builder: (_) => const AnimalForm()),
     );
 
     if (novoAnimal != null && mounted) {
@@ -39,29 +38,8 @@ class _ListaAnimaisState extends State<ListaAnimais> {
   void _abrirDetalhe(Animal animal) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => DetalheAnimal(animal: animal)),
+      MaterialPageRoute(builder: (_) => AnimalDetail(animal: animal)),
     );
-  }
-
-  Future<void> _escanearQrCode() async {
-    final scannedId = await Navigator.push<String>(
-      context,
-      MaterialPageRoute(builder: (_) => const ScannerQrcode()),
-    );
-
-    if (scannedId == null || !mounted) return;
-
-    final animal = context.read<AnimalService>().buscarPorId(scannedId);
-    if (animal != null) {
-      _abrirDetalhe(animal);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Animal não encontrado para este QR Code.'),
-          backgroundColor: Colors.orange,
-        ),
-      );
-    }
   }
 
   void _removerAnimal(String id) {
@@ -89,23 +67,6 @@ class _ListaAnimaisState extends State<ListaAnimais> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.agriculture, size: 28),
-            SizedBox(width: 8),
-            Text('Agrotrilho'),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.qr_code_scanner),
-            tooltip: 'Escanear QR Code',
-            onPressed: _escanearQrCode,
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _abrirCadastro,
         icon: const Icon(Icons.add),
