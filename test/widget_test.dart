@@ -75,12 +75,7 @@ void main() {
     });
 
     test('fromMap should handle missing optional fields', () {
-      final map = {
-        'id': 'min-id',
-        'nome': 'Malhada',
-        'idade': 6,
-        'peso': 150,
-      };
+      final map = {'id': 'min-id', 'nome': 'Malhada', 'idade': 6, 'peso': 150};
 
       final animal = Animal.fromMap(map);
 
@@ -109,8 +104,13 @@ void main() {
     test('encodeList/decodeList should round-trip list', () {
       final animals = [
         Animal(id: 'a1', nome: 'Mimosa', idade: 24, peso: 350.5),
-        Animal(id: 'a2', nome: 'Trovão', idade: 18, peso: 280.0,
-            observacoes: 'Novilho'),
+        Animal(
+          id: 'a2',
+          nome: 'Trovão',
+          idade: 18,
+          peso: 280.0,
+          observacoes: 'Novilho',
+        ),
       ];
 
       final encoded = Animal.encodeList(animals);
@@ -131,14 +131,35 @@ void main() {
   });
 
   group('QrCodeService', () {
-    test('should generate data from animal id', () {
-      expect(QrCodeService.gerarDados('abc-123'), 'abc-123');
+    test('should generate JSON data from animal', () {
+      final animal = Animal(
+        id: 'abc-123',
+        nome: 'Mimosa',
+        idade: 24,
+        peso: 350.5,
+        observacoes: 'Boa produção',
+      );
+      final result = QrCodeService.gerarDados(animal);
+      final data = json.decode(result) as Map<String, dynamic>;
+
+      expect(data['id'], 'abc-123');
+      expect(data['nome'], 'Mimosa');
+      expect(data['idade'], 24);
+      expect(data['peso'], 350.5);
+      expect(data['observacoes'], 'Boa produção');
     });
 
-    test('should validate UUID format', () {
+    test('should validate JSON QR code format', () {
+      final jsonQr = json.encode({
+        'id': '550e8400-e29b-41d4-a716-446655440000',
+        'nome': 'Mimosa',
+      });
+      expect(QrCodeService.validarQrCode(jsonQr), isTrue);
+    });
+
+    test('should validate legacy UUID format', () {
       expect(
-        QrCodeService.validarQrCode(
-            '550e8400-e29b-41d4-a716-446655440000'),
+        QrCodeService.validarQrCode('550e8400-e29b-41d4-a716-446655440000'),
         isTrue,
       );
     });
@@ -147,6 +168,24 @@ void main() {
       expect(QrCodeService.validarQrCode('not-a-uuid'), isFalse);
       expect(QrCodeService.validarQrCode(null), isFalse);
       expect(QrCodeService.validarQrCode(''), isFalse);
+    });
+
+    test('should extract id from JSON QR code', () {
+      final jsonQr = json.encode({'id': 'test-id-123', 'nome': 'Mimosa'});
+      expect(QrCodeService.extrairId(jsonQr), 'test-id-123');
+    });
+
+    test('should extract id from legacy UUID QR code', () {
+      expect(
+        QrCodeService.extrairId('550e8400-e29b-41d4-a716-446655440000'),
+        '550e8400-e29b-41d4-a716-446655440000',
+      );
+    });
+
+    test('should return null for invalid QR code', () {
+      expect(QrCodeService.extrairId(null), isNull);
+      expect(QrCodeService.extrairId(''), isNull);
+      expect(QrCodeService.extrairId('not-valid'), isNull);
     });
   });
 
@@ -158,6 +197,11 @@ void main() {
       expect(Validators.validarNome('Mimosa'), isNull);
     });
 
+    test('should reject nome exceeding max length', () {
+      final longName = 'A' * (Validators.maxNomeLength + 1);
+      expect(Validators.validarNome(longName), isNotNull);
+    });
+
     test('should validate idade', () {
       expect(Validators.validarIdade(null), isNotNull);
       expect(Validators.validarIdade(''), isNotNull);
@@ -167,6 +211,14 @@ void main() {
       expect(Validators.validarIdade('12'), isNull);
     });
 
+    test('should reject idade exceeding max', () {
+      expect(Validators.validarIdade('${Validators.maxIdade + 1}'), isNotNull);
+    });
+
+    test('should accept idade at max boundary', () {
+      expect(Validators.validarIdade('${Validators.maxIdade}'), isNull);
+    });
+
     test('should validate peso', () {
       expect(Validators.validarPeso(null), isNotNull);
       expect(Validators.validarPeso(''), isNotNull);
@@ -174,6 +226,20 @@ void main() {
       expect(Validators.validarPeso('-5'), isNotNull);
       expect(Validators.validarPeso('abc'), isNotNull);
       expect(Validators.validarPeso('350.5'), isNull);
+    });
+
+    test('should reject peso exceeding max', () {
+      expect(Validators.validarPeso('${Validators.maxPeso + 1}'), isNotNull);
+    });
+
+    test('should accept peso at max boundary', () {
+      expect(Validators.validarPeso('${Validators.maxPeso}'), isNull);
+    });
+
+    test('should trim whitespace before parsing', () {
+      expect(Validators.validarIdade('  12  '), isNull);
+      expect(Validators.validarPeso('  350.5  '), isNull);
+      expect(Validators.validarNome('  Mimosa  '), isNull);
     });
   });
 
