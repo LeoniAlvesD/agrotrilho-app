@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:agrotrilho_app/models/animal.dart';
+import 'package:agrotrilho_app/models/platform_config.dart';
 import 'package:agrotrilho_app/services/qrcode_service.dart';
+import 'package:agrotrilho_app/services/nfc_platform_service.dart';
 import 'package:agrotrilho_app/utils/validators.dart';
 import 'package:agrotrilho_app/utils/constants.dart';
 import 'package:agrotrilho_app/utils/responsive_helper.dart';
+import 'package:agrotrilho_app/utils/platform_helper.dart';
+import 'package:agrotrilho_app/utils/platform_config.dart';
 
 void main() {
   group('Animal Model', () {
@@ -294,6 +298,87 @@ void main() {
       expect(AppSpacing.xl, 20);
       expect(AppSpacing.xxl, 24);
       expect(AppSpacing.xxxl, 32);
+    });
+  });
+
+  group('PlatformHelper', () {
+    // Tests run in the Dart VM (not web, not Android, not iOS), so:
+    test('isWeb should be false in test environment', () {
+      expect(PlatformHelper.isWeb, isFalse);
+    });
+
+    test('isMobile should equal isAndroid || isIOS', () {
+      expect(PlatformHelper.isMobile,
+          PlatformHelper.isAndroid || PlatformHelper.isIOS);
+    });
+
+    test('platformName should return a non-empty string', () {
+      expect(PlatformHelper.platformName, isNotEmpty);
+    });
+
+    test('supportsQrScanning should always be true', () {
+      expect(PlatformHelper.supportsQrScanning, isTrue);
+    });
+
+    test('supportsNfc should equal isMobile', () {
+      expect(PlatformHelper.supportsNfc, PlatformHelper.isMobile);
+    });
+
+    test('supportsCameraScanning should equal isMobile', () {
+      expect(PlatformHelper.supportsCameraScanning, PlatformHelper.isMobile);
+    });
+  });
+
+  group('PlatformConfig (utils)', () {
+    test('modeLabel should return a non-empty string', () {
+      expect(PlatformConfig.modeLabel, isNotEmpty);
+    });
+
+    test('scannerCapabilities should return a non-empty string', () {
+      expect(PlatformConfig.scannerCapabilities, isNotEmpty);
+    });
+
+    test('shouldSimulateQr should match isWeb', () {
+      expect(PlatformConfig.shouldSimulateQr, PlatformHelper.isWeb);
+    });
+  });
+
+  group('PlatformCapabilities model', () {
+    test('web constructor should disable NFC and camera', () {
+      const caps = PlatformCapabilities.web();
+      expect(caps.supportsNfc, isFalse);
+      expect(caps.supportsCameraScanning, isFalse);
+      expect(caps.supportsQrScanning, isTrue);
+      expect(caps.platformName, 'Web');
+    });
+
+    test('android constructor should enable NFC and camera', () {
+      const caps = PlatformCapabilities.android();
+      expect(caps.supportsNfc, isTrue);
+      expect(caps.supportsCameraScanning, isTrue);
+      expect(caps.supportsQrScanning, isTrue);
+      expect(caps.platformName, 'Android');
+    });
+
+    test('ios constructor should enable NFC and camera', () {
+      const caps = PlatformCapabilities.ios();
+      expect(caps.supportsNfc, isTrue);
+      expect(caps.supportsCameraScanning, isTrue);
+      expect(caps.supportsQrScanning, isTrue);
+      expect(caps.platformName, 'iOS');
+    });
+  });
+
+  group('NfcPlatformService', () {
+    test('statusText should return a non-empty string', () {
+      final service = NfcPlatformService();
+      expect(service.statusText, isNotEmpty);
+    });
+
+    test('isAvailable should return a future', () async {
+      final service = NfcPlatformService();
+      final result = await service.isAvailable();
+      expect(result, isA<bool>());
     });
   });
 }

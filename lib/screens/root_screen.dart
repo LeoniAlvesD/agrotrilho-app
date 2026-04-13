@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
 import '../utils/responsive_helper.dart';
+import '../utils/platform_helper.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/app_bottom_nav.dart';
+import '../widgets/platform_indicator.dart';
 import 'home/dashboard_screen.dart';
 import 'animais/lista_animais.dart';
 import 'scanner/qr_scanner_screen.dart';
+import 'scanner/nfc_reader_screen.dart';
 import 'relatorios/relatorios_screen.dart';
 import 'configuracoes/configuracoes_screen.dart';
 
@@ -79,6 +82,10 @@ class _RootScreenState extends State<RootScreen> {
           ],
         ),
         automaticallyImplyLeading: isMobile,
+        actions: const [
+          PlatformIndicator(),
+          SizedBox(width: 12),
+        ],
       ),
       drawer: isMobile
           ? AppDrawer(
@@ -190,6 +197,28 @@ class _ScannerPlaceholder extends StatelessWidget {
               color: colorScheme.onSurfaceVariant,
             ),
           ),
+          if (PlatformHelper.supportsNfc) ...[
+            SizedBox(height: AppSpacing.xxl),
+            OutlinedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const NfcReaderScreen()),
+                );
+              },
+              icon: const Icon(Icons.nfc),
+              label: const Text('Abrir Leitor NFC'),
+            ),
+          ],
+          if (PlatformHelper.isWeb) ...[
+            SizedBox(height: AppSpacing.lg),
+            Text(
+              'NFC não disponível em web',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant.withAlpha(140),
+              ),
+            ),
+          ],
         ],
       ),
     );
