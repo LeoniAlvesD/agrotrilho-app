@@ -41,3 +41,18 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# C++ / CMake build artifacts
+native/build/
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.lib
+*.exe
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+Makefile
