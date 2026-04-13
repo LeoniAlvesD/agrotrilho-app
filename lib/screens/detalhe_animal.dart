@@ -38,10 +38,11 @@ class DetalheAnimal extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
+              final messenger = ScaffoldMessenger.of(context);
               context.read<AnimalService>().remover(animal.id);
               Navigator.pop(dialogContext);
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
+              messenger.showSnackBar(
                 SnackBar(
                   content: Text('${animal.nome} removido.'),
                   backgroundColor: Colors.red[700],
