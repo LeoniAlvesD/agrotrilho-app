@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/responsive_helper.dart';
+import '../utils/constants.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/app_bottom_nav.dart';
 import 'home/dashboard_screen.dart';
@@ -96,7 +97,7 @@ class _RootScreenState extends State<RootScreen> {
                       child: Icon(
                         Icons.agriculture,
                         size: 36,
-                        color: Colors.white,
+                        color: AppColors.primary,
                       ),
                     )
                   : null,

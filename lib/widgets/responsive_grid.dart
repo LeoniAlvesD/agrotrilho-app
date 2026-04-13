@@ -22,14 +22,16 @@ class ResponsiveGrid extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final totalSpacing = spacing * (columns - 1);
-          final itemWidth = (constraints.maxWidth - totalSpacing) / columns;
+          final availableWidth = constraints.maxWidth - totalSpacing;
+          final itemWidth =
+              availableWidth > 0 ? availableWidth / columns : constraints.maxWidth;
 
           return Wrap(
             spacing: spacing,
             runSpacing: runSpacing,
             children: children.map((child) {
               return SizedBox(
-                width: itemWidth > 0 ? itemWidth : constraints.maxWidth,
+                width: itemWidth,
                 child: child,
               );
             }).toList(),
