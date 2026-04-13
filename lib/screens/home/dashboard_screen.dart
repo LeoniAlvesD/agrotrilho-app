@@ -68,24 +68,17 @@ class DashboardScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              Padding(
-                padding: ResponsiveHelper.getPadding(context),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: ElevatedButton.icon(
-                    onPressed: () => _abrirCadastro(context, service),
-                    icon: const Icon(Icons.add),
-                    label: const Text('Cadastrar Novo Animal'),
-                  ),
+              SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: ElevatedButton.icon(
+                  onPressed: () => _abrirCadastro(context, service),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Cadastrar Novo Animal'),
                 ),
               ),
               const SizedBox(height: 24),
-              if (animais.isNotEmpty)
-                Padding(
-                  padding: ResponsiveHelper.getPadding(context),
-                  child: _buildRecentAnimals(context, animais),
-                ),
+              if (animais.isNotEmpty) _buildRecentAnimals(context, animais),
             ],
           ),
         );

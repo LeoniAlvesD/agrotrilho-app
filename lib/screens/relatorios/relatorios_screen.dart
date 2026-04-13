@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../models/animal.dart';
 import '../../services/animal_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/responsive_helper.dart';
@@ -89,19 +90,7 @@ class RelatoriosScreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 StatsCard(
                   title: 'Distribuição por Idade',
-                  children: animais.map((a) {
-                    final maxIdade = animais
-                        .map((x) => x.idade)
-                        .reduce((a, b) => a > b ? a : b);
-                    return StatWidget(
-                      label: a.nome,
-                      value:
-                          '${a.idade} ${a.idade == 1 ? 'mês' : 'meses'}',
-                      fraction:
-                          maxIdade > 0 ? a.idade / maxIdade : 0,
-                      color: Colors.blue,
-                    );
-                  }).toList(),
+                  children: _buildIdadeStats(animais),
                 ),
               ],
               if (animais.isEmpty)
@@ -141,6 +130,22 @@ class RelatoriosScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  List<Widget> _buildIdadeStats(List<Animal> animais) {
+    final maxIdade = animais
+        .map((a) => a.idade)
+        .reduce((a, b) => a > b ? a : b);
+    return animais
+        .map(
+          (a) => StatWidget(
+            label: a.nome,
+            value: '${a.idade} ${a.idade == 1 ? 'mês' : 'meses'}',
+            fraction: maxIdade > 0 ? a.idade / maxIdade : 0,
+            color: Colors.blue,
+          ),
+        )
+        .toList();
   }
 
   Widget _buildSummaryRow(String label, String value, IconData icon) {
