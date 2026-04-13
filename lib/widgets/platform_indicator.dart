@@ -9,7 +9,7 @@ class PlatformIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final label = PlatformConfig.modeLabel;
+    final modeLabel = PlatformConfig.modeLabel;
 
     return Tooltip(
       message: PlatformConfig.scannerCapabilities,
@@ -23,7 +23,7 @@ class PlatformIndicator extends StatelessWidget {
           borderRadius: BorderRadius.circular(AppSpacing.sm),
         ),
         child: Text(
-          label,
+          modeLabel,
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w600,

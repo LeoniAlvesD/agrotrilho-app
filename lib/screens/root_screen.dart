@@ -84,7 +84,7 @@ class _RootScreenState extends State<RootScreen> {
         automaticallyImplyLeading: isMobile,
         actions: const [
           PlatformIndicator(),
-          SizedBox(width: 12),
+          SizedBox(width: AppSpacing.md),
         ],
       ),
       drawer: isMobile

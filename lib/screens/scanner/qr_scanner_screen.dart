@@ -149,7 +149,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
         title: const Text('Escanear QR Code'),
         actions: const [
           PlatformIndicator(),
-          SizedBox(width: 12),
+          SizedBox(width: AppSpacing.md),
         ],
       ),
       body: Center(
