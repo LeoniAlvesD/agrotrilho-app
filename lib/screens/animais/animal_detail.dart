@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/animal.dart';
 import '../../services/animal_service.dart';
+import '../../services/qrcode_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/responsive_helper.dart';
 import '../../widgets/qr_display_widget.dart';
@@ -15,9 +16,7 @@ class AnimalDetail extends StatelessWidget {
   void _editarAnimal(BuildContext context) async {
     final atualizado = await Navigator.push<Animal>(
       context,
-      MaterialPageRoute(
-        builder: (_) => AnimalForm(animal: animal),
-      ),
+      MaterialPageRoute(builder: (_) => AnimalForm(animal: animal)),
     );
 
     if (atualizado != null && context.mounted) {
@@ -52,9 +51,7 @@ class AnimalDetail extends StatelessWidget {
                 ),
               );
             },
-            style: TextButton.styleFrom(
-              foregroundColor: colorScheme.error,
-            ),
+            style: TextButton.styleFrom(foregroundColor: colorScheme.error),
             child: const Text('Excluir'),
           ),
         ],
@@ -106,10 +103,7 @@ class AnimalDetail extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: AppSpacing.lg),
-                Text(
-                  animal.nome,
-                  style: theme.textTheme.headlineSmall,
-                ),
+                Text(animal.nome, style: theme.textTheme.headlineSmall),
                 SizedBox(height: AppSpacing.xxl),
                 _buildInfoCard(context),
                 SizedBox(height: AppSpacing.lg),
@@ -117,7 +111,7 @@ class AnimalDetail extends StatelessWidget {
                   _buildObservacoesCard(context),
                   SizedBox(height: AppSpacing.lg),
                 ],
-                QrDisplayWidget(data: animal.id),
+                QrDisplayWidget(data: QrCodeService.gerarDados(animal)),
                 SizedBox(height: AppSpacing.lg),
               ],
             ),
@@ -217,10 +211,7 @@ class AnimalDetail extends StatelessWidget {
               ],
             ),
             const Divider(),
-            Text(
-              animal.observacoes,
-              style: theme.textTheme.bodyLarge,
-            ),
+            Text(animal.observacoes, style: theme.textTheme.bodyLarge),
           ],
         ),
       ),

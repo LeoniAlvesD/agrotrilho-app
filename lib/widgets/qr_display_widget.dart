@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../services/qrcode_service.dart';
 import '../utils/constants.dart';
 
 class QrDisplayWidget extends StatelessWidget {
   final String data;
   final double size;
 
-  const QrDisplayWidget({
-    super.key,
-    required this.data,
-    this.size = 200,
-  });
+  const QrDisplayWidget({super.key, required this.data, this.size = 200});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final shortId =
-        data.length >= 8 ? data.substring(0, 8).toUpperCase() : data.toUpperCase();
+    final animalId = QrCodeService.extrairId(data) ?? data;
+    final shortId = animalId.length >= 8
+        ? animalId.substring(0, 8).toUpperCase()
+        : animalId.toUpperCase();
 
     return Semantics(
       label: 'QR Code do Animal, ID: $shortId',
@@ -31,10 +30,7 @@ class QrDisplayWidget extends StatelessWidget {
                 children: [
                   Icon(Icons.qr_code_2, color: colorScheme.primary),
                   SizedBox(width: AppSpacing.sm),
-                  Text(
-                    'QR Code do Animal',
-                    style: theme.textTheme.titleMedium,
-                  ),
+                  Text('QR Code do Animal', style: theme.textTheme.titleMedium),
                 ],
               ),
               SizedBox(height: AppSpacing.lg),
