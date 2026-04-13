@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/animal.dart';
 import '../../services/animal_service.dart';
-import '../../utils/constants.dart';
 import '../../utils/responsive_helper.dart';
 import '../../widgets/stats_card.dart';
 import '../../widgets/stat_widget.dart';
@@ -12,6 +11,9 @@ class RelatoriosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Consumer<AnimalService>(
       builder: (context, service, _) {
         final animais = service.animais;
@@ -34,38 +36,41 @@ class RelatoriosScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Relatórios do Rebanho',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: theme.textTheme.headlineSmall,
               ),
               const SizedBox(height: 4),
               Text(
                 'Estatísticas e análise dos animais cadastrados',
-                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
               ),
               const SizedBox(height: 20),
               StatsCard(
                 title: 'Resumo Geral',
                 children: [
                   _buildSummaryRow(
+                    context,
                     'Total de Animais',
                     '$total',
                     Icons.pets,
                   ),
                   _buildSummaryRow(
+                    context,
                     'Peso Total',
                     '${pesoTotal.toStringAsFixed(1)} kg',
                     Icons.monitor_weight,
                   ),
                   _buildSummaryRow(
+                    context,
                     'Peso Médio',
                     '${pesoMedio.toStringAsFixed(1)} kg',
                     Icons.scale,
                   ),
                   _buildSummaryRow(
+                    context,
                     'Idade Média',
                     '${idadeMedia.toStringAsFixed(1)} meses',
                     Icons.calendar_today,
@@ -82,7 +87,7 @@ class RelatoriosScreen extends StatelessWidget {
                           label: a.nome,
                           value: '${a.peso} kg',
                           fraction: a.peso / maxPeso,
-                          color: AppColors.primary,
+                          color: colorScheme.primary,
                         ),
                       )
                       .toList(),
@@ -102,22 +107,21 @@ class RelatoriosScreen extends StatelessWidget {
                         Icon(
                           Icons.bar_chart,
                           size: 80,
-                          color: Colors.grey[300],
+                          color: colorScheme.onSurfaceVariant.withAlpha(80),
                         ),
                         const SizedBox(height: 16),
                         Text(
                           'Nenhum dado para exibir',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey[500],
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
                           ),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Cadastre animais para ver relatórios',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[400],
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color:
+                                colorScheme.onSurfaceVariant.withAlpha(180),
                           ),
                         ),
                       ],
@@ -148,23 +152,32 @@ class RelatoriosScreen extends StatelessWidget {
         .toList();
   }
 
-  Widget _buildSummaryRow(String label, String value, IconData icon) {
+  Widget _buildSummaryRow(
+    BuildContext context,
+    String label,
+    String value,
+    IconData icon,
+  ) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.primary, size: 22),
+          Icon(icon, color: colorScheme.primary, size: 22),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               label,
-              style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 15,
+            style: theme.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),

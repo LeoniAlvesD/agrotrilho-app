@@ -10,6 +10,16 @@ class AppColors {
   static const Color error = Color(0xFFD32F2F);
 }
 
+class AppSpacing {
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 12;
+  static const double lg = 16;
+  static const double xl = 20;
+  static const double xxl = 24;
+  static const double xxxl = 32;
+}
+
 class AppStrings {
   static const String appName = 'Agrotrilho';
   static const String appVersion = '1.0.0';

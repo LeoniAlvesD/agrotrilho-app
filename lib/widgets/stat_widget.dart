@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../utils/constants.dart';
 
 class StatWidget extends StatelessWidget {
   final String label;
@@ -17,7 +16,10 @@ class StatWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final barColor = color ?? AppColors.primary;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final barColor = color ?? colorScheme.primary;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Column(
@@ -29,27 +31,35 @@ class StatWidget extends StatelessWidget {
               Flexible(
                 child: Text(
                   label,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ),
               Text(
                 value,
-                style: const TextStyle(
-                  fontSize: 14,
+                style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 4),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: fraction.clamp(0.0, 1.0),
-              backgroundColor: Colors.grey[200],
-              valueColor: AlwaysStoppedAnimation<Color>(barColor),
-              minHeight: 8,
-            ),
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: fraction.clamp(0.0, 1.0)),
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.easeOutCubic,
+            builder: (context, animatedValue, _) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: LinearProgressIndicator(
+                  value: animatedValue,
+                  backgroundColor: colorScheme.surfaceContainerHighest,
+                  valueColor: AlwaysStoppedAnimation<Color>(barColor),
+                  minHeight: 8,
+                ),
+              );
+            },
           ),
         ],
       ),

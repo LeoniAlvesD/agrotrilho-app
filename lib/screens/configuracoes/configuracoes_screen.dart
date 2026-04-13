@@ -7,21 +7,17 @@ class ConfiguracoesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SingleChildScrollView(
       padding: ResponsiveHelper.getPadding(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 8),
-          const Text(
-            'Configurações',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Text('Configurações', style: theme.textTheme.headlineSmall),
           const SizedBox(height: 20),
-          _buildProfileCard(),
+          _buildProfileCard(context),
           const SizedBox(height: 16),
           _buildSettingsSection(context),
           const SizedBox(height: 16),
@@ -32,7 +28,10 @@ class ConfiguracoesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileCard() {
+  Widget _buildProfileCard(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -42,39 +41,35 @@ class ConfiguracoesScreen extends StatelessWidget {
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: AppColors.primary.withAlpha(25),
+                color: colorScheme.primary.withAlpha(25),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.person,
-                color: AppColors.primary,
+                color: colorScheme.primary,
                 size: 36,
               ),
             ),
             const SizedBox(width: 16),
-            const Expanded(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     AppStrings.producerName,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: theme.textTheme.titleMedium,
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
                     AppStrings.producerEmail,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.edit, color: Colors.grey),
+            Icon(Icons.edit, color: colorScheme.onSurfaceVariant),
           ],
         ),
       ),
@@ -82,10 +77,13 @@ class ConfiguracoesScreen extends StatelessWidget {
   }
 
   Widget _buildSettingsSection(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Card(
       child: Column(
         children: [
           _buildSettingsTile(
+            context,
             icon: Icons.notifications_outlined,
             title: 'Notificações',
             subtitle: 'Gerenciar alertas e lembretes',
@@ -93,6 +91,7 @@ class ConfiguracoesScreen extends StatelessWidget {
           ),
           const Divider(height: 1),
           _buildSettingsTile(
+            context,
             icon: Icons.palette_outlined,
             title: 'Tema',
             subtitle: 'Claro / Escuro (em breve)',
@@ -100,6 +99,7 @@ class ConfiguracoesScreen extends StatelessWidget {
           ),
           const Divider(height: 1),
           _buildSettingsTile(
+            context,
             icon: Icons.language,
             title: 'Idioma',
             subtitle: 'Português (Brasil)',
@@ -111,10 +111,13 @@ class ConfiguracoesScreen extends StatelessWidget {
   }
 
   Widget _buildAboutSection(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Card(
       child: Column(
         children: [
           _buildSettingsTile(
+            context,
             icon: Icons.info_outline,
             title: 'Sobre o App',
             subtitle: AppStrings.appDescription,
@@ -123,10 +126,10 @@ class ConfiguracoesScreen extends StatelessWidget {
                 context: context,
                 applicationName: AppStrings.appName,
                 applicationVersion: AppStrings.appVersion,
-                applicationIcon: const Icon(
+                applicationIcon: Icon(
                   Icons.agriculture,
                   size: 48,
-                  color: AppColors.primary,
+                  color: colorScheme.primary,
                 ),
                 children: [
                   const Text(AppStrings.appDescription),
@@ -136,6 +139,7 @@ class ConfiguracoesScreen extends StatelessWidget {
           ),
           const Divider(height: 1),
           _buildSettingsTile(
+            context,
             icon: Icons.verified_outlined,
             title: 'Versão',
             subtitle: AppStrings.appVersion,
@@ -146,17 +150,20 @@ class ConfiguracoesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsTile({
+  Widget _buildSettingsTile(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String subtitle,
     required VoidCallback onTap,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return ListTile(
-      leading: Icon(icon, color: AppColors.primary),
+      leading: Icon(icon, color: colorScheme.primary),
       title: Text(title),
       subtitle: Text(subtitle),
-      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+      trailing: Icon(Icons.chevron_right, color: colorScheme.onSurfaceVariant),
       onTap: onTap,
     );
   }

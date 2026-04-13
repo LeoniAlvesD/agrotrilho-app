@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/animal.dart';
-import '../../utils/constants.dart';
 import '../../utils/validators.dart';
+import '../../utils/responsive_helper.dart';
 
 class AnimalForm extends StatefulWidget {
   final Animal? animal;
@@ -57,70 +57,83 @@ class _AnimalFormState extends State<AnimalForm> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(isEdicao ? 'Editar Animal' : 'Cadastrar Animal'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Icon(
-                Icons.pets,
-                size: 64,
-                color: AppColors.primary,
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: SingleChildScrollView(
+            padding: ResponsiveHelper.getPadding(context),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 8),
+                  Icon(
+                    Icons.pets,
+                    size: 64,
+                    color: colorScheme.primary,
+                  ),
+                  const SizedBox(height: 24),
+                  TextFormField(
+                    controller: nomeController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nome do Animal',
+                      prefixIcon: Icon(Icons.label),
+                    ),
+                    validator: Validators.validarNome,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: idadeController,
+                    decoration: const InputDecoration(
+                      labelText: 'Idade (meses)',
+                      prefixIcon: Icon(Icons.calendar_today),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: Validators.validarIdade,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: pesoController,
+                    decoration: const InputDecoration(
+                      labelText: 'Peso (kg)',
+                      prefixIcon: Icon(Icons.monitor_weight),
+                    ),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
+                    validator: Validators.validarPeso,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: observacoesController,
+                    decoration: const InputDecoration(
+                      labelText: 'Observações',
+                      prefixIcon: Icon(Icons.notes),
+                      alignLabelWithHint: true,
+                    ),
+                    maxLines: 3,
+                    textInputAction: TextInputAction.done,
+                  ),
+                  const SizedBox(height: 32),
+                  ElevatedButton.icon(
+                    onPressed: salvar,
+                    icon: Icon(isEdicao ? Icons.check : Icons.save),
+                    label: Text(
+                        isEdicao ? 'Atualizar Animal' : 'Salvar Animal'),
+                  ),
+                ],
               ),
-              const SizedBox(height: 24),
-              TextFormField(
-                controller: nomeController,
-                decoration: const InputDecoration(
-                  labelText: 'Nome do Animal',
-                  prefixIcon: Icon(Icons.label),
-                ),
-                validator: Validators.validarNome,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: idadeController,
-                decoration: const InputDecoration(
-                  labelText: 'Idade (meses)',
-                  prefixIcon: Icon(Icons.calendar_today),
-                ),
-                keyboardType: TextInputType.number,
-                validator: Validators.validarIdade,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: pesoController,
-                decoration: const InputDecoration(
-                  labelText: 'Peso (kg)',
-                  prefixIcon: Icon(Icons.monitor_weight),
-                ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                validator: Validators.validarPeso,
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: observacoesController,
-                decoration: const InputDecoration(
-                  labelText: 'Observações',
-                  prefixIcon: Icon(Icons.notes),
-                  alignLabelWithHint: true,
-                ),
-                maxLines: 3,
-              ),
-              const SizedBox(height: 32),
-              ElevatedButton.icon(
-                onPressed: salvar,
-                icon: Icon(isEdicao ? Icons.check : Icons.save),
-                label:
-                    Text(isEdicao ? 'Atualizar Animal' : 'Salvar Animal'),
-              ),
-            ],
+            ),
           ),
         ),
       ),

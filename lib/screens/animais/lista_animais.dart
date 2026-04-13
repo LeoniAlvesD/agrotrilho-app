@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../models/animal.dart';
 import '../../services/animal_service.dart';
-import '../../utils/constants.dart';
 import '../../widgets/animal_card.dart';
 import 'animal_form.dart';
 import 'animal_detail.dart';
@@ -51,10 +50,10 @@ class _ListaAnimaisState extends State<ListaAnimais> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('${animal.nome} removido.'),
-          backgroundColor: Colors.red[700],
+          backgroundColor: Theme.of(context).colorScheme.error,
           action: SnackBarAction(
             label: 'Desfazer',
-            textColor: Colors.white,
+            textColor: Theme.of(context).colorScheme.onError,
             onPressed: () {
               service.adicionar(animal);
             },
@@ -66,6 +65,9 @@ class _ListaAnimaisState extends State<ListaAnimais> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _abrirCadastro,
@@ -110,24 +112,27 @@ class _ListaAnimaisState extends State<ListaAnimais> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.pets, size: 80, color: Colors.grey[300]),
+                        Icon(
+                          Icons.pets,
+                          size: 80,
+                          color: colorScheme.onSurfaceVariant.withAlpha(80),
+                        ),
                         const SizedBox(height: 16),
                         Text(
                           _filtro.isEmpty
                               ? 'Nenhum animal cadastrado'
                               : 'Nenhum animal encontrado',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey[500],
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
                           ),
                         ),
                         if (_filtro.isEmpty) ...[
                           const SizedBox(height: 8),
                           Text(
                             'Toque em "Novo Animal" para começar',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[400],
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.onSurfaceVariant
+                                  .withAlpha(180),
                             ),
                           ),
                         ],
@@ -136,16 +141,16 @@ class _ListaAnimaisState extends State<ListaAnimais> {
                   ),
                 )
               else ...[
-                Container(
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
-                  color: AppColors.primary.withAlpha(15),
+                  color: colorScheme.primary.withAlpha(15),
                   child: Text(
                     '${animais.length} ${animais.length == 1 ? 'animal cadastrado' : 'animais cadastrados'}',
-                    style: const TextStyle(
-                      fontSize: 15,
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: AppColors.primary,
+                      color: colorScheme.primary,
                     ),
                   ),
                 ),
@@ -162,16 +167,16 @@ class _ListaAnimaisState extends State<ListaAnimais> {
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.only(right: 20),
                           margin: const EdgeInsets.symmetric(
-                            vertical: 6,
+                            vertical: 4,
                             horizontal: 12,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(12),
+                            color: colorScheme.error,
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.delete,
-                            color: Colors.white,
+                            color: colorScheme.onError,
                           ),
                         ),
                         onDismissed: (_) => _removerAnimal(animal.id),

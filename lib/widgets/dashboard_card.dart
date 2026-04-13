@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/constants.dart';
 
-class DashboardCard extends StatelessWidget {
+class DashboardCard extends StatefulWidget {
   final IconData icon;
   final String title;
   final String value;
@@ -18,45 +17,56 @@ class DashboardCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final cardColor = color ?? AppColors.primary;
+  State<DashboardCard> createState() => _DashboardCardState();
+}
 
-    return Card(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: cardColor.withAlpha(25),
-                  borderRadius: BorderRadius.circular(12),
+class _DashboardCardState extends State<DashboardCard> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final cardColor = widget.color ?? colorScheme.primary;
+
+    return AnimatedScale(
+      duration: const Duration(milliseconds: 120),
+      scale: _pressed ? 0.97 : 1.0,
+      child: Card(
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: widget.onTap,
+          onHighlightChanged: (v) => setState(() => _pressed = v),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: cardColor.withAlpha(25),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(widget.icon, color: cardColor, size: 24),
                 ),
-                child: Icon(icon, color: cardColor, size: 24),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: cardColor,
+                const SizedBox(height: 12),
+                Text(
+                  widget.value,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    color: cardColor,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
+                const SizedBox(height: 4),
+                Text(
+                  widget.title,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
