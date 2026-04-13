@@ -3,7 +3,7 @@
 namespace agrotrilho {
 
 static constexpr double kEarthRadiusMeters = 6371000.0;
-static constexpr double kPi = 3.14159265358979323846;
+static constexpr double kPi = M_PI;
 
 static double to_radians(double degrees) {
     return degrees * kPi / 180.0;

@@ -5,7 +5,7 @@ import 'package:agrotrilho_app/main.dart';
 
 void main() {
   testWidgets('App renders the animal list screen', (WidgetTester tester) async {
-    await tester.pumpWidget(AgrotrilhoApp());
+    await tester.pumpWidget(const AgrotrilhoApp());
 
     // Verify the app bar title is displayed.
     expect(find.text('Agrotrilho 🚜'), findsOneWidget);

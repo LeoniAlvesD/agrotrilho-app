@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'screens/lista_animais.dart';
 
 void main() {
-  runApp(AgrotrilhoApp());
+  runApp(const AgrotrilhoApp());
 }
 
 class AgrotrilhoApp extends StatelessWidget {
+  const AgrotrilhoApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
