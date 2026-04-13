@@ -1,17 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:provider/provider.dart';
 import '../models/animal.dart';
+import '../services/animal_service.dart';
 import '../utils/constants.dart';
+import '../widgets/qr_display_widget.dart';
+import 'cadastro_animal.dart';
 
 class DetalheAnimal extends StatelessWidget {
   final Animal animal;
 
   const DetalheAnimal({super.key, required this.animal});
 
+  void _editarAnimal(BuildContext context) async {
+    final atualizado = await Navigator.push<Animal>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => CadastroAnimal(animal: animal),
+      ),
+    );
+
+    if (atualizado != null && context.mounted) {
+      context.read<AnimalService>().atualizar(atualizado);
+      Navigator.pop(context);
+    }
+  }
+
+  void _deletarAnimal(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Confirmar exclusão'),
+        content: Text('Deseja realmente excluir "${animal.nome}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<AnimalService>().remover(animal.id);
+              Navigator.pop(dialogContext);
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${animal.nome} removido.'),
+                  backgroundColor: Colors.red[700],
+                ),
+              );
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Excluir'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(animal.nome)),
+      appBar: AppBar(
+        title: Text(animal.nome),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'Editar',
+            onPressed: () => _editarAnimal(context),
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            tooltip: 'Excluir',
+            onPressed: () => _deletarAnimal(context),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -38,24 +100,20 @@ class DetalheAnimal extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            _buildInfoCard(context),
+            _buildInfoCard(),
             const SizedBox(height: 16),
             if (animal.observacoes.isNotEmpty) ...[
               _buildObservacoesCard(),
               const SizedBox(height: 16),
             ],
-            if (animal.nfcTagId != null) ...[
-              _buildNfcCard(),
-              const SizedBox(height: 16),
-            ],
-            _buildQrCodeCard(context),
+            QrDisplayWidget(data: animal.id),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoCard(BuildContext context) {
+  Widget _buildInfoCard() {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -140,88 +198,6 @@ class DetalheAnimal extends StatelessWidget {
             Text(
               animal.observacoes,
               style: const TextStyle(fontSize: 15),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNfcCard() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            const Icon(Icons.nfc, color: AppColors.primary, size: 28),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Tag NFC Associada',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  animal.nfcTagId!,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildQrCodeCard(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.qr_code_2, color: AppColors.primary),
-                SizedBox(width: 8),
-                Text(
-                  'QR Code do Animal',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            QrImageView(
-              data: animal.id,
-              version: QrVersions.auto,
-              size: 200,
-              backgroundColor: Colors.white,
-              eyeStyle: const QrEyeStyle(
-                eyeShape: QrEyeShape.roundedOuter,
-                color: AppColors.primary,
-              ),
-              dataModuleStyle: const QrDataModuleStyle(
-                dataModuleShape: QrDataModuleShape.roundedOuter,
-                color: AppColors.primary,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'ID: ${animal.id.substring(0, 8).toUpperCase()}',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey[500],
-              ),
             ),
           ],
         ),

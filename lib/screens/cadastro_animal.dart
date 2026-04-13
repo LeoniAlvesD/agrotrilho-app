@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import '../models/animal.dart';
 import '../utils/constants.dart';
+import '../utils/validators.dart';
 
 class CadastroAnimal extends StatefulWidget {
-  const CadastroAnimal({super.key});
+  final Animal? animal;
+
+  const CadastroAnimal({super.key, this.animal});
 
   @override
   State<CadastroAnimal> createState() => _CadastroAnimalState();
@@ -15,6 +18,19 @@ class _CadastroAnimalState extends State<CadastroAnimal> {
   final idadeController = TextEditingController();
   final pesoController = TextEditingController();
   final observacoesController = TextEditingController();
+
+  bool get isEdicao => widget.animal != null;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.animal != null) {
+      nomeController.text = widget.animal!.nome;
+      idadeController.text = widget.animal!.idade.toString();
+      pesoController.text = widget.animal!.peso.toString();
+      observacoesController.text = widget.animal!.observacoes;
+    }
+  }
 
   @override
   void dispose() {
@@ -29,6 +45,7 @@ class _CadastroAnimalState extends State<CadastroAnimal> {
     if (!_formKey.currentState!.validate()) return;
 
     final animal = Animal(
+      id: widget.animal?.id,
       nome: nomeController.text.trim(),
       idade: int.tryParse(idadeController.text) ?? 0,
       peso: double.tryParse(pesoController.text) ?? 0.0,
@@ -41,7 +58,9 @@ class _CadastroAnimalState extends State<CadastroAnimal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Cadastrar Animal')),
+      appBar: AppBar(
+        title: Text(isEdicao ? 'Editar Animal' : 'Cadastrar Animal'),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Form(
@@ -61,12 +80,7 @@ class _CadastroAnimalState extends State<CadastroAnimal> {
                   labelText: 'Nome do Animal',
                   prefixIcon: Icon(Icons.label),
                 ),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return 'Informe o nome do animal';
-                  }
-                  return null;
-                },
+                validator: Validators.validarNome,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -76,16 +90,7 @@ class _CadastroAnimalState extends State<CadastroAnimal> {
                   prefixIcon: Icon(Icons.calendar_today),
                 ),
                 keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Informe a idade';
-                  }
-                  final parsed = int.tryParse(value);
-                  if (parsed == null || parsed <= 0) {
-                    return 'Informe um número válido maior que zero';
-                  }
-                  return null;
-                },
+                validator: Validators.validarIdade,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -96,16 +101,7 @@ class _CadastroAnimalState extends State<CadastroAnimal> {
                 ),
                 keyboardType:
                     const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Informe o peso';
-                  }
-                  final parsed = double.tryParse(value);
-                  if (parsed == null || parsed <= 0) {
-                    return 'Informe um número válido maior que zero';
-                  }
-                  return null;
-                },
+                validator: Validators.validarPeso,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -120,8 +116,9 @@ class _CadastroAnimalState extends State<CadastroAnimal> {
               const SizedBox(height: 32),
               ElevatedButton.icon(
                 onPressed: salvar,
-                icon: const Icon(Icons.save),
-                label: const Text('Salvar Animal'),
+                icon: Icon(isEdicao ? Icons.check : Icons.save),
+                label:
+                    Text(isEdicao ? 'Atualizar Animal' : 'Salvar Animal'),
               ),
             ],
           ),
