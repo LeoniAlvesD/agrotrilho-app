@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Necessário para ler QR Code dos animais</string>
+	<key>NFCReaderUsageDescription</key>
+	<string>Necessário para ler tags NFC dos animais</string>
 </dict>
 </plist>
