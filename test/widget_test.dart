@@ -221,6 +221,7 @@ void main() {
       expect(AppSpacing.lg, 16);
       expect(AppSpacing.xl, 24);
       expect(AppSpacing.xxl, 32);
+      expect(AppSpacing.xxxl, 48);
     });
   });
 }
