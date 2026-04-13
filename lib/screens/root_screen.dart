@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../utils/responsive_helper.dart';
-import '../utils/constants.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/app_bottom_nav.dart';
 import 'home/dashboard_screen.dart';
@@ -65,6 +64,7 @@ class _RootScreenState extends State<RootScreen> {
   Widget build(BuildContext context) {
     final isMobile = ResponsiveHelper.isMobile(context);
     final isDesktop = ResponsiveHelper.isDesktop(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -91,13 +91,15 @@ class _RootScreenState extends State<RootScreen> {
               extended: isDesktop,
               selectedIndex: _selectedIndex,
               onDestinationSelected: _onItemSelected,
+              backgroundColor: colorScheme.surface,
+              indicatorColor: colorScheme.primary.withAlpha(30),
               leading: isDesktop
-                  ? const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Icon(
                         Icons.agriculture,
                         size: 36,
-                        color: AppColors.primary,
+                        color: colorScheme.primary,
                       ),
                     )
                   : null,
@@ -132,7 +134,9 @@ class _RootScreenState extends State<RootScreen> {
           if (!isMobile) const VerticalDivider(thickness: 1, width: 1),
           Expanded(
             child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 250),
+              switchInCurve: Curves.easeInOut,
+              switchOutCurve: Curves.easeInOut,
               child: KeyedSubtree(
                 key: ValueKey(_selectedIndex),
                 child: _buildBody(),
@@ -156,15 +160,24 @@ class _ScannerPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.qr_code_scanner, size: 80, color: Colors.grey[300]),
+          Icon(
+            Icons.qr_code_scanner,
+            size: 80,
+            color: colorScheme.onSurfaceVariant.withAlpha(80),
+          ),
           const SizedBox(height: 16),
           Text(
             'Toque no botão Scanner para abrir a câmera',
-            style: TextStyle(fontSize: 16, color: Colors.grey[500]),
+            style: theme.textTheme.bodyLarge?.copyWith(
+              color: colorScheme.onSurfaceVariant,
+            ),
           ),
         ],
       ),

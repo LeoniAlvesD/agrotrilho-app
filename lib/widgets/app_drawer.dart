@@ -21,6 +21,8 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Drawer(
       child: Column(
         children: [
@@ -36,18 +38,22 @@ class AppDrawer extends StatelessWidget {
                 return ListTile(
                   leading: Icon(
                     item.icon,
-                    color: isSelected ? AppColors.primary : Colors.grey[700],
+                    color: isSelected
+                        ? colorScheme.primary
+                        : colorScheme.onSurfaceVariant,
                   ),
                   title: Text(
                     item.label,
                     style: TextStyle(
                       fontWeight:
                           isSelected ? FontWeight.bold : FontWeight.normal,
-                      color: isSelected ? AppColors.primary : Colors.grey[800],
+                      color: isSelected
+                          ? colorScheme.primary
+                          : colorScheme.onSurface,
                     ),
                   ),
                   selected: isSelected,
-                  selectedTileColor: AppColors.primary.withAlpha(20),
+                  selectedTileColor: colorScheme.primary.withAlpha(20),
                   onTap: () {
                     onItemSelected(index);
                     if (Scaffold.of(context).isDrawerOpen) {
@@ -60,7 +66,10 @@ class AppDrawer extends StatelessWidget {
           ),
           const Divider(height: 1),
           ListTile(
-            leading: const Icon(Icons.info_outline),
+            leading: Icon(
+              Icons.info_outline,
+              color: colorScheme.onSurfaceVariant,
+            ),
             title: const Text('Sobre'),
             onTap: () {
               Navigator.pop(context);
@@ -68,10 +77,10 @@ class AppDrawer extends StatelessWidget {
                 context: context,
                 applicationName: AppStrings.appName,
                 applicationVersion: AppStrings.appVersion,
-                applicationIcon: const Icon(
+                applicationIcon: Icon(
                   Icons.agriculture,
                   size: 48,
-                  color: AppColors.primary,
+                  color: colorScheme.primary,
                 ),
                 children: [
                   const Text(AppStrings.appDescription),
@@ -86,8 +95,10 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return DrawerHeader(
-      decoration: const BoxDecoration(color: AppColors.primary),
+      decoration: BoxDecoration(color: colorScheme.primary),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

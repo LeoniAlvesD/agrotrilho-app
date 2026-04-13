@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../utils/constants.dart';
 
 class StatsCard extends StatelessWidget {
   final String title;
@@ -13,6 +12,9 @@ class StatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -21,15 +23,9 @@ class StatsCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Icon(Icons.bar_chart, color: AppColors.primary),
+                Icon(Icons.bar_chart, color: colorScheme.primary),
                 const SizedBox(width: 8),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                Text(title, style: theme.textTheme.titleMedium),
               ],
             ),
             const Divider(),

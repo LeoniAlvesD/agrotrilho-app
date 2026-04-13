@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import '../../utils/constants.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
@@ -34,16 +33,20 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Escanear QR Code'),
         actions: [
           IconButton(
             icon: const Icon(Icons.flash_on),
+            tooltip: 'Flash',
             onPressed: () => _controller.toggleTorch(),
           ),
           IconButton(
             icon: const Icon(Icons.cameraswitch),
+            tooltip: 'Trocar câmera',
             onPressed: () => _controller.switchCamera(),
           ),
         ],
@@ -55,16 +58,22 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
             onDetect: _onDetect,
           ),
           Center(
-            child: Container(
-              width: 250,
-              height: 250,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: AppColors.primary,
-                  width: 3,
-                ),
-                borderRadius: BorderRadius.circular(16),
-              ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final scanSize =
+                    constraints.maxWidth < 300 ? constraints.maxWidth - 48 : 250.0;
+                return Container(
+                  width: scanSize,
+                  height: scanSize,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: colorScheme.primary,
+                      width: 3,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                );
+              },
             ),
           ),
           Positioned(

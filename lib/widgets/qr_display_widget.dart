@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import '../utils/constants.dart';
 
 class QrDisplayWidget extends StatelessWidget {
   final String data;
@@ -14,46 +13,51 @@ class QrDisplayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.qr_code_2, color: AppColors.primary),
-                SizedBox(width: 8),
+                Icon(Icons.qr_code_2, color: colorScheme.primary),
+                const SizedBox(width: 8),
                 Text(
                   'QR Code do Animal',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: theme.textTheme.titleMedium,
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            QrImageView(
-              data: data,
-              version: QrVersions.auto,
-              size: size,
-              backgroundColor: Colors.white,
-              eyeStyle: const QrEyeStyle(
-                eyeShape: QrEyeShape.square,
-                color: AppColors.primary,
-              ),
-              dataModuleStyle: const QrDataModuleStyle(
-                dataModuleShape: QrDataModuleShape.square,
-                color: AppColors.primary,
-              ),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final qrSize =
+                    size < constraints.maxWidth ? size : constraints.maxWidth - 32;
+                return QrImageView(
+                  data: data,
+                  version: QrVersions.auto,
+                  size: qrSize,
+                  backgroundColor: Colors.white,
+                  eyeStyle: QrEyeStyle(
+                    eyeShape: QrEyeShape.square,
+                    color: colorScheme.primary,
+                  ),
+                  dataModuleStyle: QrDataModuleStyle(
+                    dataModuleShape: QrDataModuleShape.square,
+                    color: colorScheme.primary,
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 8),
             Text(
               'ID: ${data.length >= 8 ? data.substring(0, 8).toUpperCase() : data.toUpperCase()}',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey[500],
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
               ),
             ),
           ],

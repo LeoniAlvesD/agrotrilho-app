@@ -13,6 +13,9 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return Consumer<AnimalService>(
       builder: (context, service, _) {
         final animais = service.animais;
@@ -34,15 +37,14 @@ class DashboardScreen extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 'Olá, ${AppStrings.producerName}!',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: theme.textTheme.headlineSmall,
               ),
               const SizedBox(height: 4),
               Text(
                 'Resumo do seu rebanho',
-                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
               ),
               const SizedBox(height: 20),
               ResponsiveGrid(
@@ -51,7 +53,7 @@ class DashboardScreen extends StatelessWidget {
                     icon: Icons.pets,
                     title: 'Total de Animais',
                     value: '$totalAnimais',
-                    color: AppColors.primary,
+                    color: colorScheme.primary,
                   ),
                   DashboardCard(
                     icon: Icons.monitor_weight,
@@ -68,14 +70,10 @@ class DashboardScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton.icon(
-                  onPressed: () => _abrirCadastro(context, service),
-                  icon: const Icon(Icons.add),
-                  label: const Text('Cadastrar Novo Animal'),
-                ),
+              ElevatedButton.icon(
+                onPressed: () => _abrirCadastro(context, service),
+                icon: const Icon(Icons.add),
+                label: const Text('Cadastrar Novo Animal'),
               ),
               const SizedBox(height: 24),
               if (animais.isNotEmpty) _buildRecentAnimals(context, animais),
@@ -98,23 +96,23 @@ class DashboardScreen extends StatelessWidget {
   }
 
   Widget _buildRecentAnimals(BuildContext context, List<Animal> animais) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final recent = animais.length > 3 ? animais.sublist(0, 3) : animais;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               children: [
-                Icon(Icons.history, color: AppColors.primary),
-                SizedBox(width: 8),
+                Icon(Icons.history, color: colorScheme.primary),
+                const SizedBox(width: 8),
                 Text(
                   'Animais Recentes',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: theme.textTheme.titleMedium,
                 ),
               ],
             ),
@@ -126,12 +124,12 @@ class DashboardScreen extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withAlpha(25),
+                    color: colorScheme.primary.withAlpha(25),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.pets,
-                    color: AppColors.primary,
+                    color: colorScheme.primary,
                     size: 24,
                   ),
                 ),

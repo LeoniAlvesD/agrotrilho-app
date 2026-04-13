@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../utils/constants.dart';
 
 class AppBottomNav extends StatelessWidget {
   final int currentIndex;
@@ -13,37 +12,37 @@ class AppBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return NavigationBar(
       selectedIndex: currentIndex,
       onDestinationSelected: onTap,
-      backgroundColor: AppColors.surface,
-      indicatorColor: AppColors.primary.withAlpha(30),
-      animationDuration: const Duration(milliseconds: 200),
-      destinations: const [
+      animationDuration: const Duration(milliseconds: 300),
+      destinations: [
         NavigationDestination(
-          icon: Icon(Icons.dashboard_outlined),
-          selectedIcon: Icon(Icons.dashboard, color: AppColors.primary),
+          icon: const Icon(Icons.dashboard_outlined),
+          selectedIcon: Icon(Icons.dashboard, color: colorScheme.primary),
           label: 'Home',
         ),
         NavigationDestination(
-          icon: Icon(Icons.pets_outlined),
-          selectedIcon: Icon(Icons.pets, color: AppColors.primary),
+          icon: const Icon(Icons.pets_outlined),
+          selectedIcon: Icon(Icons.pets, color: colorScheme.primary),
           label: 'Animais',
         ),
         NavigationDestination(
-          icon: Icon(Icons.qr_code_scanner_outlined),
+          icon: const Icon(Icons.qr_code_scanner_outlined),
           selectedIcon:
-              Icon(Icons.qr_code_scanner, color: AppColors.primary),
+              Icon(Icons.qr_code_scanner, color: colorScheme.primary),
           label: 'Scanner',
         ),
         NavigationDestination(
-          icon: Icon(Icons.bar_chart_outlined),
-          selectedIcon: Icon(Icons.bar_chart, color: AppColors.primary),
+          icon: const Icon(Icons.bar_chart_outlined),
+          selectedIcon: Icon(Icons.bar_chart, color: colorScheme.primary),
           label: 'Relatórios',
         ),
         NavigationDestination(
-          icon: Icon(Icons.settings_outlined),
-          selectedIcon: Icon(Icons.settings, color: AppColors.primary),
+          icon: const Icon(Icons.settings_outlined),
+          selectedIcon: Icon(Icons.settings, color: colorScheme.primary),
           label: 'Config',
         ),
       ],

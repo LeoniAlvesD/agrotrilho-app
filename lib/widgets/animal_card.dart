@@ -1,61 +1,77 @@
 import 'package:flutter/material.dart';
 import '../models/animal.dart';
-import '../utils/constants.dart';
 
-class AnimalCard extends StatelessWidget {
+class AnimalCard extends StatefulWidget {
   final Animal animal;
   final VoidCallback? onTap;
 
   const AnimalCard({super.key, required this.animal, this.onTap});
 
   @override
+  State<AnimalCard> createState() => _AnimalCardState();
+}
+
+class _AnimalCardState extends State<AnimalCard> {
+  bool _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Card(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withAlpha(25),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.pets,
-                  color: AppColors.primary,
-                  size: 32,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      animal.nome,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+      child: AnimatedScale(
+        duration: const Duration(milliseconds: 120),
+        scale: _pressed ? 0.98 : 1.0,
+        child: Card(
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: widget.onTap,
+            onHighlightChanged: (v) => setState(() => _pressed = v),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary.withAlpha(25),
+                      borderRadius: BorderRadius.circular(14),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${animal.peso} kg  •  ${animal.idade} ${animal.idade == 1 ? 'mês' : 'meses'}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                    child: Icon(
+                      Icons.pets,
+                      color: colorScheme.primary,
+                      size: 32,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.animal.nome,
+                          style: theme.textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${widget.animal.peso} kg  •  ${widget.animal.idade} ${widget.animal.idade == 1 ? 'mês' : 'meses'}',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    Icons.chevron_right,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ],
               ),
-              const Icon(Icons.chevron_right, color: Colors.grey),
-            ],
+            ),
           ),
         ),
       ),
