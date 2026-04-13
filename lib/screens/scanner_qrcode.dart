@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import '../utils/constants.dart';
 
 class ScannerQrcode extends StatefulWidget {
   const ScannerQrcode({super.key});
@@ -59,7 +60,7 @@ class _ScannerQrcodeState extends State<ScannerQrcode> {
               height: 250,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: const Color(0xFF2E7D32),
+                  color: AppColors.primary,
                   width: 3,
                 ),
                 borderRadius: BorderRadius.circular(16),

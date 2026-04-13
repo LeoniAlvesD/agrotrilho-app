@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import '../models/animal.dart';
+import '../utils/constants.dart';
 import '../widgets/animal_card.dart';
 import 'cadastro_animal.dart';
 import 'detalhe_animal.dart';
@@ -54,6 +55,18 @@ class _ListaAnimaisState extends State<ListaAnimais> {
     return null;
   }
 
+  String? _extractNfcTagId(NfcTag tag) {
+    final nfcData = tag.data;
+    for (final key in ['nfca', 'nfcb', 'nfcf', 'nfcv']) {
+      if (nfcData.containsKey(key)) {
+        return (nfcData[key]['identifier'] as List?)
+            ?.map((e) => e.toRadixString(16).padLeft(2, '0'))
+            .join(':');
+      }
+    }
+    return null;
+  }
+
   Future<void> _escanearQrCode() async {
     final scannedId = await Navigator.push<String>(
       context,
@@ -95,7 +108,7 @@ class _ListaAnimaisState extends State<ListaAnimais> {
       builder: (dialogContext) => AlertDialog(
         title: const Row(
           children: [
-            Icon(Icons.nfc, color: Color(0xFF2E7D32)),
+            Icon(Icons.nfc, color: AppColors.primary),
             SizedBox(width: 8),
             Text('Leitura NFC'),
           ],
@@ -103,7 +116,7 @@ class _ListaAnimaisState extends State<ListaAnimais> {
         content: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(color: Color(0xFF2E7D32)),
+            CircularProgressIndicator(color: AppColors.primary),
             SizedBox(height: 16),
             Text('Aproxime a tag NFC do dispositivo...'),
           ],
@@ -122,26 +135,7 @@ class _ListaAnimaisState extends State<ListaAnimais> {
 
     NfcManager.instance.startSession(
       onDiscovered: (NfcTag tag) async {
-        final nfcData = tag.data;
-        String? tagId;
-
-        if (nfcData.containsKey('nfca')) {
-          tagId = (nfcData['nfca']['identifier'] as List?)
-              ?.map((e) => e.toRadixString(16).padLeft(2, '0'))
-              .join(':');
-        } else if (nfcData.containsKey('nfcb')) {
-          tagId = (nfcData['nfcb']['identifier'] as List?)
-              ?.map((e) => e.toRadixString(16).padLeft(2, '0'))
-              .join(':');
-        } else if (nfcData.containsKey('nfcf')) {
-          tagId = (nfcData['nfcf']['identifier'] as List?)
-              ?.map((e) => e.toRadixString(16).padLeft(2, '0'))
-              .join(':');
-        } else if (nfcData.containsKey('nfcv')) {
-          tagId = (nfcData['nfcv']['identifier'] as List?)
-              ?.map((e) => e.toRadixString(16).padLeft(2, '0'))
-              .join(':');
-        }
+        final tagId = _extractNfcTagId(tag);
 
         NfcManager.instance.stopSession();
 
@@ -220,7 +214,7 @@ class _ListaAnimaisState extends State<ListaAnimais> {
                   SnackBar(
                     content: Text(
                         'Tag NFC associada a ${animal.nome} com sucesso!'),
-                    backgroundColor: const Color(0xFF2E7D32),
+                    backgroundColor: AppColors.primary,
                   ),
                 );
               },
@@ -292,13 +286,13 @@ class _ListaAnimaisState extends State<ListaAnimais> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
-                  color: const Color(0xFF2E7D32).withAlpha(15),
+                  color: AppColors.primary.withAlpha(15),
                   child: Text(
                     '${animais.length} ${animais.length == 1 ? 'animal cadastrado' : 'animais cadastrados'}',
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF2E7D32),
+                      color: AppColors.primary,
                     ),
                   ),
                 ),

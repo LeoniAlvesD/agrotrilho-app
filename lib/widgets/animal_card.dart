@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/animal.dart';
+import '../utils/constants.dart';
 
 class AnimalCard extends StatelessWidget {
   final Animal animal;
@@ -21,12 +22,12 @@ class AnimalCard extends StatelessWidget {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2E7D32).withAlpha(25),
+                  color: AppColors.primary.withAlpha(25),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(
                   Icons.pets,
-                  color: Color(0xFF2E7D32),
+                  color: AppColors.primary,
                   size: 32,
                 ),
               ),

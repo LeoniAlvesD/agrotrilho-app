@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/lista_animais.dart';
+import 'utils/constants.dart';
 
 void main() {
   runApp(const AgrotrilhoApp());
@@ -15,20 +16,20 @@ class AgrotrilhoApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorSchemeSeed: const Color(0xFF2E7D32),
+        colorSchemeSeed: AppColors.primary,
         appBarTheme: const AppBarTheme(
           centerTitle: true,
-          backgroundColor: Color(0xFF2E7D32),
+          backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           elevation: 2,
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFF2E7D32),
+          backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF2E7D32),
+            backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
             minimumSize: const Size(double.infinity, 52),
             textStyle: const TextStyle(fontSize: 18),
@@ -43,7 +44,7 @@ class AgrotrilhoApp extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Color(0xFF2E7D32), width: 2),
+            borderSide: const BorderSide(color: AppColors.primary, width: 2),
           ),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16, vertical: 14),

@@ -1,6 +1,8 @@
 import 'package:uuid/uuid.dart';
 
 class Animal {
+  static const _uuid = Uuid();
+
   final String id;
   final String nome;
   final int idade;
@@ -15,7 +17,7 @@ class Animal {
     required this.peso,
     this.observacoes = '',
     this.nfcTagId,
-  }) : id = id ?? const Uuid().v4();
+  }) : id = id ?? _uuid.v4();
 
   Map<String, dynamic> toMap() {
     return {

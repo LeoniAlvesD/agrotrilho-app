@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../models/animal.dart';
+import '../utils/constants.dart';
 
 class DetalheAnimal extends StatelessWidget {
   final Animal animal;
@@ -19,12 +20,12 @@ class DetalheAnimal extends StatelessWidget {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: const Color(0xFF2E7D32).withAlpha(25),
+                color: AppColors.primary.withAlpha(25),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: const Icon(
                 Icons.pets,
-                color: Color(0xFF2E7D32),
+                color: AppColors.primary,
                 size: 48,
               ),
             ),
@@ -95,7 +96,7 @@ class DetalheAnimal extends StatelessWidget {
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Row(
       children: [
-        Icon(icon, color: const Color(0xFF2E7D32), size: 22),
+        Icon(icon, color: AppColors.primary, size: 22),
         const SizedBox(width: 12),
         Text(
           '$label: ',
@@ -124,7 +125,7 @@ class DetalheAnimal extends StatelessWidget {
           children: [
             const Row(
               children: [
-                Icon(Icons.notes, color: Color(0xFF2E7D32)),
+                Icon(Icons.notes, color: AppColors.primary),
                 SizedBox(width: 8),
                 Text(
                   'Observações',
@@ -152,7 +153,7 @@ class DetalheAnimal extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            const Icon(Icons.nfc, color: Color(0xFF2E7D32), size: 28),
+            const Icon(Icons.nfc, color: AppColors.primary, size: 28),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,7 +189,7 @@ class DetalheAnimal extends StatelessWidget {
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.qr_code_2, color: Color(0xFF2E7D32)),
+                Icon(Icons.qr_code_2, color: AppColors.primary),
                 SizedBox(width: 8),
                 Text(
                   'QR Code do Animal',
@@ -207,11 +208,11 @@ class DetalheAnimal extends StatelessWidget {
               backgroundColor: Colors.white,
               eyeStyle: const QrEyeStyle(
                 eyeShape: QrEyeShape.roundedOuter,
-                color: Color(0xFF2E7D32),
+                color: AppColors.primary,
               ),
               dataModuleStyle: const QrDataModuleStyle(
                 dataModuleShape: QrDataModuleShape.roundedOuter,
-                color: Color(0xFF2E7D32),
+                color: AppColors.primary,
               ),
             ),
             const SizedBox(height: 8),

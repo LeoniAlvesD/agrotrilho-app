@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/animal.dart';
+import '../utils/constants.dart';
 
 class CadastroAnimal extends StatefulWidget {
   const CadastroAnimal({super.key});
@@ -51,7 +52,7 @@ class _CadastroAnimalState extends State<CadastroAnimal> {
               const Icon(
                 Icons.pets,
                 size: 64,
-                color: Color(0xFF2E7D32),
+                color: AppColors.primary,
               ),
               const SizedBox(height: 24),
               TextFormField(
@@ -79,8 +80,9 @@ class _CadastroAnimalState extends State<CadastroAnimal> {
                   if (value == null || value.isEmpty) {
                     return 'Informe a idade';
                   }
-                  if (int.tryParse(value) == null) {
-                    return 'Informe um número válido';
+                  final parsed = int.tryParse(value);
+                  if (parsed == null || parsed <= 0) {
+                    return 'Informe um número válido maior que zero';
                   }
                   return null;
                 },
@@ -98,8 +100,9 @@ class _CadastroAnimalState extends State<CadastroAnimal> {
                   if (value == null || value.isEmpty) {
                     return 'Informe o peso';
                   }
-                  if (double.tryParse(value) == null) {
-                    return 'Informe um número válido';
+                  final parsed = double.tryParse(value);
+                  if (parsed == null || parsed <= 0) {
+                    return 'Informe um número válido maior que zero';
                   }
                   return null;
                 },
