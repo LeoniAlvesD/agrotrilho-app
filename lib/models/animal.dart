@@ -8,7 +8,6 @@ class Animal {
   final int idade;
   final double peso;
   final String observacoes;
-  String? nfcTagId;
 
   Animal({
     String? id,
@@ -16,7 +15,6 @@ class Animal {
     required this.idade,
     required this.peso,
     this.observacoes = '',
-    this.nfcTagId,
   }) : id = id ?? _uuid.v4();
 
   Map<String, dynamic> toMap() {
@@ -26,7 +24,6 @@ class Animal {
       'idade': idade,
       'peso': peso,
       'observacoes': observacoes,
-      'nfcTagId': nfcTagId,
     };
   }
 
@@ -37,7 +34,6 @@ class Animal {
       idade: map['idade'] as int,
       peso: (map['peso'] as num).toDouble(),
       observacoes: map['observacoes'] as String? ?? '',
-      nfcTagId: map['nfcTagId'] as String?,
     );
   }
 }

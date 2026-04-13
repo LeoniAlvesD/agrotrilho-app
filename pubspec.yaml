@@ -15,13 +15,16 @@ dependencies:
 
   # QR Code generation and scanning
   qr_flutter: ^4.1.0
-  mobile_scanner: ^4.1.0
-
-  # NFC reading
-  nfc_manager: ^3.8.0+1
+  mobile_scanner: ^3.5.0
 
   # Unique ID generation
   uuid: ^4.0.0
+
+  # Date & localization
+  intl: ^0.19.0
+
+  # State Management
+  provider: ^6.0.0
 
 dev_dependencies:
   flutter_test:
