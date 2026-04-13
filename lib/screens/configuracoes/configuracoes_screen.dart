@@ -12,21 +12,22 @@ class ConfiguracoesScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           const Text(
             'Configurações',
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: AppSpacing.xl),
           _buildProfileCard(),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           _buildSettingsSection(context),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           _buildAboutSection(context),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
         ],
       ),
     );
@@ -35,23 +36,27 @@ class ConfiguracoesScreen extends StatelessWidget {
   Widget _buildProfileCard() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Row(
           children: [
             Container(
               width: 64,
               height: 64,
               decoration: BoxDecoration(
-                color: AppColors.primary.withAlpha(25),
-                borderRadius: BorderRadius.circular(16),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [AppColors.primary, AppColors.primaryDark],
+                ),
+                borderRadius: BorderRadius.circular(18),
               ),
               child: const Icon(
                 Icons.person,
-                color: AppColors.primary,
-                size: 36,
+                color: Colors.white,
+                size: 32,
               ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: AppSpacing.lg),
             const Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,21 +65,34 @@ class ConfiguracoesScreen extends StatelessWidget {
                     AppStrings.producerName,
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.textPrimary,
                     ),
                   ),
-                  SizedBox(height: 4),
+                  SizedBox(height: AppSpacing.xs),
                   Text(
                     AppStrings.producerEmail,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey,
+                      color: AppColors.textSecondary,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.edit, color: Colors.grey),
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(
+                Icons.edit_outlined,
+                color: AppColors.textSecondary,
+                size: 18,
+              ),
+            ),
           ],
         ),
       ),
@@ -91,14 +109,14 @@ class ConfiguracoesScreen extends StatelessWidget {
             subtitle: 'Gerenciar alertas e lembretes',
             onTap: () => _showComingSoon(context),
           ),
-          const Divider(height: 1),
+          const Divider(height: 1, indent: 56),
           _buildSettingsTile(
             icon: Icons.palette_outlined,
             title: 'Tema',
             subtitle: 'Claro / Escuro (em breve)',
             onTap: () => _showComingSoon(context),
           ),
-          const Divider(height: 1),
+          const Divider(height: 1, indent: 56),
           _buildSettingsTile(
             icon: Icons.language,
             title: 'Idioma',
@@ -123,10 +141,18 @@ class ConfiguracoesScreen extends StatelessWidget {
                 context: context,
                 applicationName: AppStrings.appName,
                 applicationVersion: AppStrings.appVersion,
-                applicationIcon: const Icon(
-                  Icons.agriculture,
-                  size: 48,
-                  color: AppColors.primary,
+                applicationIcon: Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withAlpha(20),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: const Icon(
+                    Icons.agriculture,
+                    size: 32,
+                    color: AppColors.primary,
+                  ),
                 ),
                 children: [
                   const Text(AppStrings.appDescription),
@@ -134,7 +160,7 @@ class ConfiguracoesScreen extends StatelessWidget {
               );
             },
           ),
-          const Divider(height: 1),
+          const Divider(height: 1, indent: 56),
           _buildSettingsTile(
             icon: Icons.verified_outlined,
             title: 'Versão',
@@ -153,10 +179,31 @@ class ConfiguracoesScreen extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return ListTile(
-      leading: Icon(icon, color: AppColors.primary),
-      title: Text(title),
-      subtitle: Text(subtitle),
-      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+      leading: Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: AppColors.primary.withAlpha(15),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, color: AppColors.primary, size: 20),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 15,
+        ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: const TextStyle(fontSize: 13),
+      ),
+      trailing: const Icon(
+        Icons.chevron_right,
+        color: AppColors.textSecondary,
+        size: 20,
+      ),
       onTap: onTap,
     );
   }

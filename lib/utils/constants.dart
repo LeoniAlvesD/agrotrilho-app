@@ -8,6 +8,23 @@ class AppColors {
   static const Color background = Color(0xFFF5F5F5);
   static const Color surface = Color(0xFFFFFFFF);
   static const Color error = Color(0xFFD32F2F);
+  static const Color info = Color(0xFF1976D2);
+  static const Color textPrimary = Color(0xFF1B1B1F);
+  static const Color textSecondary = Color(0xFF5F6368);
+  static const Color divider = Color(0xFFE0E0E0);
+}
+
+class AppSpacing {
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 12;
+  static const double lg = 16;
+  static const double xl = 24;
+  static const double xxl = 32;
+  static const double xxxl = 48;
+
+  static const EdgeInsets pagePadding =
+      EdgeInsets.symmetric(horizontal: 16, vertical: 12);
 }
 
 class AppStrings {

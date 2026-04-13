@@ -62,61 +62,133 @@ class _AnimalFormState extends State<AnimalForm> {
         title: Text(isEdicao ? 'Editar Animal' : 'Cadastrar Animal'),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Icon(
-                Icons.pets,
-                size: 64,
-                color: AppColors.primary,
-              ),
-              const SizedBox(height: 24),
-              TextFormField(
-                controller: nomeController,
-                decoration: const InputDecoration(
-                  labelText: 'Nome do Animal',
-                  prefixIcon: Icon(Icons.label),
+              Center(
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withAlpha(20),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(
+                    Icons.pets,
+                    size: 40,
+                    color: AppColors.primary,
+                  ),
                 ),
-                validator: Validators.validarNome,
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: idadeController,
-                decoration: const InputDecoration(
-                  labelText: 'Idade (meses)',
-                  prefixIcon: Icon(Icons.calendar_today),
+              const SizedBox(height: AppSpacing.sm),
+              Center(
+                child: Text(
+                  isEdicao
+                      ? 'Editar dados do animal'
+                      : 'Preencha os dados do animal',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textSecondary,
+                  ),
                 ),
-                keyboardType: TextInputType.number,
-                validator: Validators.validarIdade,
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: pesoController,
-                decoration: const InputDecoration(
-                  labelText: 'Peso (kg)',
-                  prefixIcon: Icon(Icons.monitor_weight),
+              const SizedBox(height: AppSpacing.xl),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Dados Principais',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      TextFormField(
+                        controller: nomeController,
+                        decoration: const InputDecoration(
+                          labelText: 'Nome do Animal',
+                          prefixIcon: Icon(Icons.label_outline),
+                        ),
+                        textCapitalization: TextCapitalization.words,
+                        validator: Validators.validarNome,
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              controller: idadeController,
+                              decoration: const InputDecoration(
+                                labelText: 'Idade (meses)',
+                                prefixIcon: Icon(Icons.calendar_today),
+                              ),
+                              keyboardType: TextInputType.number,
+                              validator: Validators.validarIdade,
+                            ),
+                          ),
+                          const SizedBox(width: AppSpacing.md),
+                          Expanded(
+                            child: TextFormField(
+                              controller: pesoController,
+                              decoration: const InputDecoration(
+                                labelText: 'Peso (kg)',
+                                prefixIcon: Icon(Icons.monitor_weight),
+                              ),
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                decimal: true,
+                              ),
+                              validator: Validators.validarPeso,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                validator: Validators.validarPeso,
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: observacoesController,
-                decoration: const InputDecoration(
-                  labelText: 'Observações',
-                  prefixIcon: Icon(Icons.notes),
-                  alignLabelWithHint: true,
+              const SizedBox(height: AppSpacing.lg),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppSpacing.lg),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Observações',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
+                      TextFormField(
+                        controller: observacoesController,
+                        decoration: const InputDecoration(
+                          labelText: 'Observações',
+                          prefixIcon: Icon(Icons.notes),
+                          alignLabelWithHint: true,
+                        ),
+                        maxLines: 3,
+                        textCapitalization: TextCapitalization.sentences,
+                      ),
+                    ],
+                  ),
                 ),
-                maxLines: 3,
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: AppSpacing.xxl),
               ElevatedButton.icon(
                 onPressed: salvar,
-                icon: Icon(isEdicao ? Icons.check : Icons.save),
+                icon: Icon(isEdicao ? Icons.check : Icons.save_outlined),
                 label:
                     Text(isEdicao ? 'Atualizar Animal' : 'Salvar Animal'),
               ),

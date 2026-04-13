@@ -17,8 +17,13 @@ class AppBottomNav extends StatelessWidget {
       selectedIndex: currentIndex,
       onDestinationSelected: onTap,
       backgroundColor: AppColors.surface,
+      surfaceTintColor: Colors.transparent,
       indicatorColor: AppColors.primary.withAlpha(30),
-      animationDuration: const Duration(milliseconds: 200),
+      animationDuration: const Duration(milliseconds: 300),
+      elevation: 3,
+      shadowColor: Colors.black26,
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+      height: 68,
       destinations: const [
         NavigationDestination(
           icon: Icon(Icons.dashboard_outlined),

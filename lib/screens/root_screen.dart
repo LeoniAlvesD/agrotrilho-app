@@ -71,8 +71,8 @@ class _RootScreenState extends State<RootScreen> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.agriculture, size: 28),
-            const SizedBox(width: 8),
+            const Icon(Icons.agriculture, size: 26),
+            const SizedBox(width: AppSpacing.sm),
             Text(_titles[_selectedIndex]),
           ],
         ),
@@ -91,13 +91,25 @@ class _RootScreenState extends State<RootScreen> {
               extended: isDesktop,
               selectedIndex: _selectedIndex,
               onDestinationSelected: _onItemSelected,
+              backgroundColor: AppColors.surface,
+              indicatorColor: AppColors.primary.withAlpha(25),
               leading: isDesktop
-                  ? const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      child: Icon(
-                        Icons.agriculture,
-                        size: 36,
-                        color: AppColors.primary,
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.sm,
+                      ),
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withAlpha(20),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.agriculture,
+                          size: 26,
+                          color: AppColors.primary,
+                        ),
                       ),
                     )
                   : null,
@@ -132,7 +144,15 @@ class _RootScreenState extends State<RootScreen> {
           if (!isMobile) const VerticalDivider(thickness: 1, width: 1),
           Expanded(
             child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 250),
+              switchInCurve: Curves.easeOut,
+              switchOutCurve: Curves.easeIn,
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
               child: KeyedSubtree(
                 key: ValueKey(_selectedIndex),
                 child: _buildBody(),
@@ -160,11 +180,35 @@ class _ScannerPlaceholder extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.qr_code_scanner, size: 80, color: Colors.grey[300]),
-          const SizedBox(height: 16),
-          Text(
+          Container(
+            width: 96,
+            height: 96,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withAlpha(15),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Icon(
+              Icons.qr_code_scanner,
+              size: 48,
+              color: Colors.grey[400],
+            ),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          const Text(
+            'Scanner QR Code',
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          const Text(
             'Toque no botão Scanner para abrir a câmera',
-            style: TextStyle(fontSize: 16, color: Colors.grey[500]),
+            style: TextStyle(
+              fontSize: 14,
+              color: AppColors.textSecondary,
+            ),
           ),
         ],
       ),

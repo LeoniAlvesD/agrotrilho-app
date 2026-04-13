@@ -31,20 +31,9 @@ class DashboardScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 8),
-              Text(
-                'Olá, ${AppStrings.producerName}!',
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                'Resumo do seu rebanho',
-                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-              ),
-              const SizedBox(height: 20),
+              const SizedBox(height: AppSpacing.sm),
+              _buildGreetingSection(),
+              const SizedBox(height: AppSpacing.xl),
               ResponsiveGrid(
                 children: [
                   DashboardCard(
@@ -63,26 +52,120 @@ class DashboardScreen extends StatelessWidget {
                     icon: Icons.calendar_today,
                     title: 'Idade Média (meses)',
                     value: idadeMedia,
-                    color: Colors.blue,
+                    color: AppColors.info,
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.xl),
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton.icon(
                   onPressed: () => _abrirCadastro(context, service),
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(Icons.add_rounded),
                   label: const Text('Cadastrar Novo Animal'),
                 ),
               ),
-              const SizedBox(height: 24),
-              if (animais.isNotEmpty) _buildRecentAnimals(context, animais),
+              const SizedBox(height: AppSpacing.xl),
+              if (animais.isNotEmpty)
+                _buildRecentAnimals(context, animais)
+              else
+                _buildEmptyState(),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildGreetingSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withAlpha(20),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: const Icon(
+                Icons.waving_hand,
+                color: AppColors.accent,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: AppSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Olá, ${AppStrings.producerName}!',
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  const Text(
+                    'Resumo do seu rebanho',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.xxl),
+        child: Column(
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withAlpha(15),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Icon(
+                Icons.pets,
+                size: 40,
+                color: Colors.grey[400],
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            const Text(
+              'Nenhum animal cadastrado',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            const Text(
+              'Comece cadastrando seu primeiro animal',
+              style: TextStyle(
+                fontSize: 14,
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -101,43 +184,77 @@ class DashboardScreen extends StatelessWidget {
     final recent = animais.length > 3 ? animais.sublist(0, 3) : animais;
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               children: [
-                Icon(Icons.history, color: AppColors.primary),
-                SizedBox(width: 8),
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withAlpha(20),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.history,
+                    color: AppColors.primary,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                const Expanded(
+                  child: Text(
+                    'Animais Recentes',
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
                 Text(
-                  'Animais Recentes',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                  '${recent.length} de ${animais.length}',
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
             ),
-            const Divider(),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
+              child: Divider(height: 1),
+            ),
             ...recent.map(
-              (animal) => ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withAlpha(25),
-                    borderRadius: BorderRadius.circular(10),
+              (animal) => Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                child: ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: Container(
+                    width: 42,
+                    height: 42,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withAlpha(20),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Icon(
+                      Icons.pets,
+                      color: AppColors.primary,
+                      size: 22,
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.pets,
-                    color: AppColors.primary,
-                    size: 24,
+                  title: Text(
+                    animal.nome,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
-                ),
-                title: Text(animal.nome),
-                subtitle: Text(
-                  '${animal.peso} kg • ${animal.idade} ${animal.idade == 1 ? 'mês' : 'meses'}',
+                  subtitle: Text(
+                    '${animal.peso} kg • ${animal.idade} ${animal.idade == 1 ? 'mês' : 'meses'}',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
                 ),
               ),
             ),

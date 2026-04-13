@@ -28,66 +28,79 @@ class AppDrawer extends StatelessWidget {
           const Divider(height: 1),
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.zero,
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
               itemCount: _items.length,
               itemBuilder: (context, index) {
                 final item = _items[index];
                 final isSelected = index == selectedIndex;
-                return ListTile(
-                  leading: Icon(
-                    item.icon,
-                    color: isSelected ? AppColors.primary : Colors.grey[700],
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.sm,
+                    vertical: 2,
                   ),
-                  title: Text(
-                    item.label,
-                    style: TextStyle(
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
-                      color: isSelected ? AppColors.primary : Colors.grey[800],
+                  child: ListTile(
+                    leading: Icon(
+                      item.icon,
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.textSecondary,
                     ),
-                  ),
-                  selected: isSelected,
-                  selectedTileColor: AppColors.primary.withAlpha(20),
-                  onTap: () {
-                    onItemSelected(index);
-                    if (Scaffold.of(context).isDrawerOpen) {
+                    title: Text(
+                      item.label,
+                      style: TextStyle(
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.normal,
+                        color: isSelected
+                            ? AppColors.primary
+                            : AppColors.textPrimary,
+                      ),
+                    ),
+                    selected: isSelected,
+                    selectedTileColor: AppColors.primary.withAlpha(20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    onTap: () {
+                      onItemSelected(index);
                       Navigator.pop(context);
-                    }
-                  },
+                    },
+                  ),
                 );
               },
             ),
           ),
           const Divider(height: 1),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: const Text('Sobre'),
-            onTap: () {
-              Navigator.pop(context);
-              showAboutDialog(
-                context: context,
-                applicationName: AppStrings.appName,
-                applicationVersion: AppStrings.appVersion,
-                applicationIcon: const Icon(
-                  Icons.agriculture,
-                  size: 48,
-                  color: AppColors.primary,
-                ),
-                children: [
-                  const Text(AppStrings.appDescription),
-                ],
-              );
-            },
+          Padding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Text(
+              'v${AppStrings.appVersion}',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[400],
+              ),
+            ),
           ),
-          const SizedBox(height: 8),
         ],
       ),
     );
   }
 
   Widget _buildHeader(BuildContext context) {
-    return DrawerHeader(
-      decoration: const BoxDecoration(color: AppColors.primary),
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.only(
+        top: MediaQuery.of(context).padding.top + AppSpacing.xl,
+        left: AppSpacing.xl,
+        right: AppSpacing.xl,
+        bottom: AppSpacing.xl,
+      ),
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [AppColors.primary, AppColors.primaryDark],
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -95,30 +108,31 @@ class AppDrawer extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: Colors.white.withAlpha(50),
+              color: Colors.white.withAlpha(40),
               borderRadius: BorderRadius.circular(16),
             ),
             child: const Icon(
               Icons.agriculture,
               color: Colors.white,
-              size: 36,
+              size: 32,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.lg),
           const Text(
             AppStrings.appName,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
+              letterSpacing: 0.5,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: AppSpacing.xs),
           Text(
-            AppStrings.producerName,
+            AppStrings.appDescription,
             style: TextStyle(
               color: Colors.white.withAlpha(200),
-              fontSize: 14,
+              fontSize: 12,
             ),
           ),
         ],

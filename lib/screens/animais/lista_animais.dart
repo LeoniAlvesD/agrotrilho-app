@@ -69,7 +69,7 @@ class _ListaAnimaisState extends State<ListaAnimais> {
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _abrirCadastro,
-        icon: const Icon(Icons.add),
+        icon: const Icon(Icons.add_rounded),
         label: const Text('Novo Animal'),
       ),
       body: Consumer<AnimalService>(
@@ -79,7 +79,12 @@ class _ListaAnimaisState extends State<ListaAnimais> {
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  AppSpacing.md,
+                  AppSpacing.md,
+                  AppSpacing.xs,
+                ),
                 child: TextField(
                   controller: _buscaController,
                   decoration: InputDecoration(
@@ -110,24 +115,39 @@ class _ListaAnimaisState extends State<ListaAnimais> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.pets, size: 80, color: Colors.grey[300]),
-                        const SizedBox(height: 16),
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withAlpha(15),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Icon(
+                            _filtro.isEmpty
+                                ? Icons.pets
+                                : Icons.search_off,
+                            size: 40,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                        const SizedBox(height: AppSpacing.lg),
                         Text(
                           _filtro.isEmpty
                               ? 'Nenhum animal cadastrado'
                               : 'Nenhum animal encontrado',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey[500],
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                         if (_filtro.isEmpty) ...[
-                          const SizedBox(height: 8),
-                          Text(
+                          const SizedBox(height: AppSpacing.sm),
+                          const Text(
                             'Toque em "Novo Animal" para começar',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey[400],
+                              color: AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -138,20 +158,58 @@ class _ListaAnimaisState extends State<ListaAnimais> {
               else ...[
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  color: AppColors.primary.withAlpha(15),
-                  child: Text(
-                    '${animais.length} ${animais.length == 1 ? 'animal cadastrado' : 'animais cadastrados'}',
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg,
+                    vertical: AppSpacing.md,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withAlpha(12),
+                    border: Border(
+                      bottom: BorderSide(
+                        color: AppColors.primary.withAlpha(30),
+                      ),
                     ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.sm,
+                          vertical: AppSpacing.xs,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withAlpha(25),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          '${animais.length}',
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: AppSpacing.sm),
+                      Text(
+                        animais.length == 1
+                            ? 'animal cadastrado'
+                            : 'animais cadastrados',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Expanded(
                   child: ListView.builder(
-                    padding: const EdgeInsets.only(top: 8, bottom: 80),
+                    padding: const EdgeInsets.only(
+                      top: AppSpacing.sm,
+                      bottom: 80,
+                    ),
                     itemCount: animais.length,
                     itemBuilder: (context, index) {
                       final animal = animais[index];
@@ -160,18 +218,32 @@ class _ListaAnimaisState extends State<ListaAnimais> {
                         direction: DismissDirection.endToStart,
                         background: Container(
                           alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 20),
+                          padding:
+                              const EdgeInsets.only(right: AppSpacing.xl),
                           margin: const EdgeInsets.symmetric(
                             vertical: 6,
                             horizontal: 12,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(12),
+                            color: AppColors.error,
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Icon(
-                            Icons.delete,
-                            color: Colors.white,
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.delete_outline,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: AppSpacing.sm),
+                              Text(
+                                'Excluir',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         onDismissed: (_) => _removerAnimal(animal.id),

@@ -17,27 +17,25 @@ class ResponsiveGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     final columns = ResponsiveHelper.getGridColumns(context);
 
-    return Padding(
-      padding: ResponsiveHelper.getPadding(context),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final totalSpacing = spacing * (columns - 1);
-          final availableWidth = constraints.maxWidth - totalSpacing;
-          final itemWidth =
-              availableWidth > 0 ? availableWidth / columns : constraints.maxWidth;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final totalSpacing = spacing * (columns - 1);
+        final availableWidth = constraints.maxWidth - totalSpacing;
+        final itemWidth = availableWidth > 0
+            ? availableWidth / columns
+            : constraints.maxWidth;
 
-          return Wrap(
-            spacing: spacing,
-            runSpacing: runSpacing,
-            children: children.map((child) {
-              return SizedBox(
-                width: itemWidth,
-                child: child,
-              );
-            }).toList(),
-          );
-        },
-      ),
+        return Wrap(
+          spacing: spacing,
+          runSpacing: runSpacing,
+          children: children.map((child) {
+            return SizedBox(
+              width: itemWidth,
+              child: child,
+            );
+          }).toList(),
+        );
+      },
     );
   }
 }

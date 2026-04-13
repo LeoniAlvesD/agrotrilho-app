@@ -205,9 +205,22 @@ void main() {
       expect(AppColors.primary.value, 0xFF2E7D32);
     });
 
+    test('AppColors should have info color', () {
+      expect(AppColors.info.value, 0xFF1976D2);
+    });
+
     test('AppStrings should have app name', () {
       expect(AppStrings.appName, 'Agrotrilho');
       expect(AppStrings.appVersion, isNotEmpty);
+    });
+
+    test('AppSpacing should have correct values', () {
+      expect(AppSpacing.xs, 4);
+      expect(AppSpacing.sm, 8);
+      expect(AppSpacing.md, 12);
+      expect(AppSpacing.lg, 16);
+      expect(AppSpacing.xl, 24);
+      expect(AppSpacing.xxl, 32);
     });
   });
 }
