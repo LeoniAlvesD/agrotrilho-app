@@ -1,14 +1,14 @@
-# 🚜 Agrotrilho
+# Agrotrilho
 
 Sistema de monitoramento e rastreamento de rebanho.
 
-## 📱 Funcionalidades
+## Funcionalidades
 - Cadastro de animais
 - Listagem
 - Controle básico
 
-## 🚀 Tecnologias
+## Tecnologias
 - Flutter
 
-## 🎯 Objetivo
+## Objetivo
 Facilitar o controle de rebanho para pequenos produtores.
