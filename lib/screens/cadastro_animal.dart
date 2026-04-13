@@ -1,21 +1,38 @@
 import 'package:flutter/material.dart';
 import '../models/animal.dart';
+import '../utils/constants.dart';
 
 class CadastroAnimal extends StatefulWidget {
+  const CadastroAnimal({super.key});
+
   @override
-  _CadastroAnimalState createState() => _CadastroAnimalState();
+  State<CadastroAnimal> createState() => _CadastroAnimalState();
 }
 
 class _CadastroAnimalState extends State<CadastroAnimal> {
+  final _formKey = GlobalKey<FormState>();
   final nomeController = TextEditingController();
   final idadeController = TextEditingController();
   final pesoController = TextEditingController();
+  final observacoesController = TextEditingController();
+
+  @override
+  void dispose() {
+    nomeController.dispose();
+    idadeController.dispose();
+    pesoController.dispose();
+    observacoesController.dispose();
+    super.dispose();
+  }
 
   void salvar() {
+    if (!_formKey.currentState!.validate()) return;
+
     final animal = Animal(
-      nome: nomeController.text,
+      nome: nomeController.text.trim(),
       idade: int.tryParse(idadeController.text) ?? 0,
       peso: double.tryParse(pesoController.text) ?? 0.0,
+      observacoes: observacoesController.text.trim(),
     );
 
     Navigator.pop(context, animal);
@@ -24,31 +41,90 @@ class _CadastroAnimalState extends State<CadastroAnimal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Cadastrar Animal")),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: nomeController,
-              decoration: InputDecoration(labelText: "Nome"),
-            ),
-            TextField(
-              controller: idadeController,
-              decoration: InputDecoration(labelText: "Idade"),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: pesoController,
-              decoration: InputDecoration(labelText: "Peso"),
-              keyboardType: TextInputType.number,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: salvar,
-              child: Text("Salvar"),
-            )
-          ],
+      appBar: AppBar(title: const Text('Cadastrar Animal')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Icon(
+                Icons.pets,
+                size: 64,
+                color: AppColors.primary,
+              ),
+              const SizedBox(height: 24),
+              TextFormField(
+                controller: nomeController,
+                decoration: const InputDecoration(
+                  labelText: 'Nome do Animal',
+                  prefixIcon: Icon(Icons.label),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Informe o nome do animal';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: idadeController,
+                decoration: const InputDecoration(
+                  labelText: 'Idade (meses)',
+                  prefixIcon: Icon(Icons.calendar_today),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Informe a idade';
+                  }
+                  final parsed = int.tryParse(value);
+                  if (parsed == null || parsed <= 0) {
+                    return 'Informe um número válido maior que zero';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: pesoController,
+                decoration: const InputDecoration(
+                  labelText: 'Peso (kg)',
+                  prefixIcon: Icon(Icons.monitor_weight),
+                ),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Informe o peso';
+                  }
+                  final parsed = double.tryParse(value);
+                  if (parsed == null || parsed <= 0) {
+                    return 'Informe um número válido maior que zero';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: observacoesController,
+                decoration: const InputDecoration(
+                  labelText: 'Observações',
+                  prefixIcon: Icon(Icons.notes),
+                  alignLabelWithHint: true,
+                ),
+                maxLines: 3,
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                onPressed: salvar,
+                icon: const Icon(Icons.save),
+                label: const Text('Salvar Animal'),
+              ),
+            ],
+          ),
         ),
       ),
     );
