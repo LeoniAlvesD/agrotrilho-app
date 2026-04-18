@@ -1,141 +1,102 @@
-# 🚜 Agrotrilho
+# 🚜 AgroTrilho
 
-**Rastreabilidade animal para pequenos e médios produtores rurais.**
+**Rastreabilidade animal para pequenos produtores rurais.**
 
-Sistema de gerenciamento e monitoramento de rebanho com identificação por QR Code e NFC, desenvolvido em Flutter.
+Sistema de gerenciamento e monitoramento de rebanho com identificação por QR Code e NFC, desenvolvido em Flutter — funciona em **Web**, **Android** e **iOS**.
 
-## ✨ Funcionalidades do MVP
+## ✨ Funcionalidades
 
 - **Cadastro de animais** — Nome, idade, peso e observações
-- **Listagem de animais** — Lista dinâmica com informações resumidas
-- **Detalhes do animal** — Todas as informações + QR Code gerado automaticamente
-- **QR Code** — Geração automática por animal e leitura via câmera
-- **NFC** — Leitura de tags NFC e associação com animais (mobile only)
+- **Listagem de animais** — Lista dinâmica com busca
+- **Detalhes do animal** — Informações completas + QR Code gerado automaticamente
+- **QR Code** — Geração automática por animal; leitura via câmera (mobile) ou simulador (web)
+- **NFC** — Leitura de tags NFC associadas a animais (mobile only)
 - **Dashboard** — Resumo do rebanho com estatísticas
 - **Relatórios** — Distribuição por peso e idade
-- **Navegação responsiva** — Drawer, Bottom Nav e Navigation Rail
+- **Navegação responsiva** — Bottom Nav (mobile) / Navigation Rail (tablet) / Drawer (desktop)
 
 ## 📱 Plataformas Suportadas
 
-### ✅ Android & iOS (PRIMARY TARGETS)
+| Plataforma | Status | Comando              |
+|------------|--------|----------------------|
+| Android    | ✅     | `flutter run`        |
+| iOS        | ✅     | `flutter run -d ios` |
+| Web        | ✅     | `flutter run -d chrome` |
+
+> **Web + JSObject fix**: o pacote `web: ^0.5.0` é fixado em `pubspec.yaml`
+> para garantir compatibilidade com Dart 3+ e evitar o erro
+> *"The type 'JSObject' can't be used as supertype"*.
+
+## 🚀 Quick Start
 
 ```bash
-flutter run                 # Android (default)
-flutter run -d ios         # iOS
-```
-
-### ⏸️ Web (Desabilitado temporariamente)
-
-Web foi desabilitado temporariamente para resolver conflitos de `JSObject` causados
-por incompatibilidade entre versões do Dart SDK e o pacote `web`.
-
-Veja: [`lib/services/platform/MIGRATION_NOTES.md`](lib/services/platform/MIGRATION_NOTES.md) para o plano de re-habilitação.
-
-## 📱 Tecnologia
-
-- **Flutter** (Dart) — Framework mobile multiplataforma
-- **Material 3** — Design system com tema verde agro
-- **qr_flutter** — Geração de QR Codes
-- **mobile_scanner** — Leitura de QR Code via câmera
-- **provider** — State management
-- **shared_preferences** — Persistência local
-
-## 🏗️ Estrutura do Projeto
-
-```
-lib/
-├── main.dart                           # App entry point
-├── models/
-│   ├── animal.dart                     # Model Animal
-│   └── platform_config.dart            # Platform capabilities model
-├── services/
-│   ├── animal_service.dart             # CRUD + persistência
-│   ├── qrcode_service.dart             # Geração/validação QR
-│   ├── qr_platform_service.dart        # QR platform-aware
-│   ├── nfc_platform_service.dart       # NFC mobile-only (safe no-op)
-│   └── platform/
-│       └── MIGRATION_NOTES.md          # Como re-habilitar web
-├── screens/
-│   ├── root_screen.dart                # Navegação central
-│   ├── home/
-│   │   └── dashboard_screen.dart       # Dashboard com resumo
-│   ├── animais/
-│   │   ├── lista_animais.dart          # Lista de animais
-│   │   ├── animal_form.dart            # Formulário de cadastro
-│   │   └── animal_detail.dart          # Detalhes + QR Code
-│   ├── scanner/
-│   │   ├── qr_scanner_screen.dart      # Scanner QR Code
-│   │   └── nfc_reader_screen.dart      # Leitor NFC (mobile-only)
-│   ├── relatorios/
-│   │   └── relatorios_screen.dart      # Relatórios e estatísticas
-│   └── configuracoes/
-│       └── configuracoes_screen.dart   # Configurações
-├── theme/
-│   └── app_theme.dart                  # Material 3 theme
-├── widgets/
-│   ├── animal_card.dart                # Card reutilizável de animal
-│   ├── app_bottom_nav.dart             # Bottom navigation (mobile)
-│   ├── app_drawer.dart                 # Navigation drawer
-│   ├── dashboard_card.dart             # Card de dashboard
-│   ├── platform_indicator.dart         # Badge de plataforma
-│   ├── qr_display_widget.dart          # Widget de exibição QR
-│   ├── responsive_grid.dart            # Grid responsivo
-│   ├── responsive_layout.dart          # Layout responsivo
-│   ├── stat_widget.dart                # Widget de estatística
-│   ├── stats_card.dart                 # Card de estatísticas
-│   └── web_qr_simulator.dart           # Simulador QR (web)
-└── utils/
-    ├── constants.dart                  # Cores, strings, spacing
-    ├── platform_config.dart            # Runtime platform config
-    ├── platform_detection.dart         # Safe platform detection
-    ├── platform_helper.dart            # Platform capabilities helper
-    ├── responsive_helper.dart          # Responsive breakpoints
-    └── validators.dart                 # Form validators
-```
-
-## 🚀 Como Rodar
-
-```bash
-# Instalar dependências
+# 1. Instalar dependências
 flutter pub get
 
-# Rodar no Android (default)
+# 2. Web (Chrome)
+flutter run -d chrome
+
+# 3. Android
 flutter run
 
-# Rodar no iOS
+# 4. iOS (macOS necessário)
 flutter run -d ios
 
-# Rodar testes
+# 5. Testes
 flutter test
 ```
 
-## 📦 Dependências
+## 📦 Tech Stack
 
-| Pacote | Uso |
-|--------|-----|
-| `qr_flutter` | Geração de QR Code |
-| `mobile_scanner` | Leitura de QR Code via câmera |
-| `uuid` | Geração de IDs únicos |
-| `intl` | Formatação de datas e números |
-| `provider` | State management |
-| `shared_preferences` | Persistência local |
+| Pacote              | Uso                           |
+|---------------------|-------------------------------|
+| `flutter`           | Framework multiplataforma     |
+| `web: ^0.5.0`       | JS interop compatível com Dart 3+ |
+| `qr_flutter`        | Geração de QR Code            |
+| `mobile_scanner`    | Leitura de QR Code via câmera |
+| `provider`          | State management              |
+| `shared_preferences`| Persistência local            |
+| `uuid`              | Geração de IDs únicos         |
+| `intl`              | Formatação de datas/números   |
+
+## 🏗️ Arquitetura
+
+```
+lib/
+├── main.dart
+├── models/          # Data models
+├── services/        # Lógica de negócio + I/O
+├── screens/         # Telas (UI)
+├── widgets/         # Widgets reutilizáveis
+├── theme/           # Material 3 theme
+└── utils/           # Helpers e constantes
+```
+
+Detalhes em [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
+## 📚 Documentação
+
+| Documento | Descrição |
+|-----------|-----------|
+| [`docs/SETUP.md`](docs/SETUP.md) | Configuração do ambiente |
+| [`docs/BUILD.md`](docs/BUILD.md) | Como buildar por plataforma |
+| [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) | Estrutura e padrões |
+| [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) | Deploy nas lojas |
 
 ## 🎨 Design
 
 - **Cor principal:** Verde agro (`#2E7D32`)
-- **UI:** Material 3 com botões grandes e interface intuitiva
-- **Ícones:** Material Icons
-- **Responsividade:** Mobile (Bottom Nav) / Tablet (Drawer) / Desktop (Drawer fixo)
+- **UI:** Material 3
+- **Responsividade:** Mobile / Tablet / Desktop
 
-## 📐 Arquitetura Multi-Platform
+## 🤝 Contribuindo
 
-O app usa **platform detection seguro** via `kIsWeb` e `defaultTargetPlatform`
-(sem `dart:io` em código compartilhado):
+1. Fork o repositório
+2. Crie uma branch: `git checkout -b feature/minha-feature`
+3. Commit: `git commit -m 'feat: adiciona X'`
+4. Push: `git push origin feature/minha-feature`
+5. Abra um Pull Request
 
-- **NFC**: disponível apenas em Android/iOS (safe no-op em outras plataformas)
-- **QR Scanner**: câmera real em mobile, simulador em web (quando habilitado)
-- **Platform Detection**: `PlatformHelper` e `PlatformDetection` utilities
+## 📝 Licença
 
-## 📝 Objetivo
-
-Facilitar o controle de rebanho para pequenos produtores rurais de Goiás, com identificação rápida via QR Code e NFC, preparado para futuras integrações com backend, sincronização offline e conformidade PNIB.
+Este projeto está sob licença MIT.

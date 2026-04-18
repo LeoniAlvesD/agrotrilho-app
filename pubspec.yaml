@@ -1,30 +1,35 @@
 name: agrotrilho_app
-description: "Agrotrilho - Rastreabilidade animal para pequenos e médios produtores rurais."
+description: "AgroTrilho - Rastreabilidade animal para pequenos produtores rurais."
 publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.3 <4.0.0'
+  sdk: '>=3.2.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
+  # UI & Core
+  cupertino_icons: ^1.0.8
+
+  # Fix for JSObject incompatibility: pin web package to 0.5.x
+  # which is compatible with Dart 3+ js interop.
+  web: ^0.5.0
 
   # QR Code generation and scanning
   qr_flutter: ^4.1.0
   mobile_scanner: ^3.5.0
 
+  # State Management
+  provider: ^6.1.0
+
   # Unique ID generation
-  uuid: ^4.0.0
+  uuid: ^4.5.0
 
   # Date & localization
-  intl: ^0.19.0
-
-  # State Management
-  provider: ^6.0.0
+  intl: ^0.20.0
 
   # Persistence
   shared_preferences: ^2.2.3
@@ -32,7 +37,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true

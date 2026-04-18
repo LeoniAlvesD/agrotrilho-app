@@ -1,92 +1,48 @@
-# Multi-Platform Migration Strategy
+# Multi-Platform Notes
 
-## Fase 1: Mobile (ATUAL) ✅
+## Status ✅
 
-- **Android**: 100% funcional
-- **iOS**: 100% funcional
-- **Web**: desabilitado temporariamente (sem conflitos JSObject)
+| Plataforma | Status           |
+|------------|-----------------|
+| Android    | ✅ Funcional     |
+| iOS        | ✅ Funcional     |
+| Web        | ✅ Funcional     |
 
-### Por que web foi desabilitado?
+## JSObject Fix (resolvido)
 
-O pacote `web: 0.3.0` (dependência transitiva de alguns plugins) usa `JSObject`
-como supertipo, o que é incompatível com certas versões do Dart/Flutter SDK.
-Isso causava centenas de erros `The type 'JSObject' can't be used as supertype`
-ao compilar para web.
+O erro `The type 'JSObject' can't be used as supertype` era causado por
+incompatibilidade entre o Dart SDK 3+ e o pacote `web: 0.3.0` (dependência
+transitiva de alguns plugins).
 
-A decisão foi compilar **apenas para mobile** até que as versões dos pacotes
-sejam compatíveis com o SDK.
+**Solução aplicada:** `web: ^0.5.0` foi adicionado diretamente ao
+`pubspec.yaml` para forçar a resolução para a versão compatível com Dart 3+.
 
----
+```yaml
+# pubspec.yaml
+dependencies:
+  web: ^0.5.0  # Fix JSObject incompatibility with Dart 3+
+```
 
-## Fase 2: Web (PRÓXIMA)
+## Platform-Safe Code
 
-### Como re-habilitar web
-
-1. **Recriar diretório web:**
-   ```bash
-   flutter create --platforms=web .
-   ```
-
-2. **Verificar compatibilidade de pacotes:**
-   ```bash
-   flutter pub outdated
-   ```
-   Certifique-se de que `mobile_scanner` e outros plugins suportam web sem
-   conflitos de `JSObject`.
-
-3. **Usar conditional imports para NFC:**
-   ```dart
-   // NFC não está disponível em web – use conditional imports
-   import 'nfc_mobile.dart' if (dart.library.html) 'nfc_web_stub.dart';
-   ```
-
-4. **Testar ambos os targets:**
-   ```bash
-   flutter run                # Android
-   flutter run -d chrome      # Web
-   flutter test               # Unit tests
-   ```
-
-5. **Verificar que não há `dart:io` em código compartilhado:**
-   ```bash
-   grep -r "dart:io" lib/
-   ```
-   Se encontrar, use conditional imports ou `package:flutter/foundation.dart`.
-
-### Padrão de Conditional Import
+Todo o código compartilhado usa `kIsWeb` e `defaultTargetPlatform`
+(de `package:flutter/foundation.dart`) — nunca importa `dart:io` diretamente.
 
 ```dart
-// ❌ NUNCA faça isso em código compartilhado:
-import 'dart:io';
-
-// ✅ Use o PlatformHelper existente (já seguro):
+// ✅ Seguro para todos os targets:
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform;
 
-// ✅ Ou use conditional imports para código platform-specific:
-import 'mobile_impl.dart'
-    if (dart.library.html) 'web_impl.dart';
+// ❌ Nunca em código compartilhado:
+import 'dart:io';
 ```
 
----
+## NFC
 
-## Estrutura de Serviços Platform-Safe
+NFC não está disponível em web. O `NfcPlatformService` retorna `false` /
+no-op automaticamente quando `PlatformHelper.isWeb` é verdadeiro.
 
-```
-services/
-├── qrcode_service.dart          # Genérico (funciona em web e mobile)
-├── animal_service.dart          # Genérico (funciona em web e mobile)
-├── qr_platform_service.dart     # Platform-aware QR scanning
-├── nfc_platform_service.dart    # NFC mobile-only (safe no-op em web)
-└── platform/
-    └── MIGRATION_NOTES.md       # Este arquivo
-```
+## QR Scanner
 
-## Checklist para Re-habilitação Web
+- **Mobile**: usa câmera real via `MobileScanner`
+- **Web**: exibe simulador via `WebQrSimulator`
 
-- [ ] Atualizar Flutter SDK para versão compatível
-- [ ] Verificar que `mobile_scanner` suporta web sem JSObject errors
-- [ ] Recriar `web/` directory com `flutter create --platforms=web .`
-- [ ] Adicionar web-specific service stubs (se necessário)
-- [ ] Testar `flutter run -d chrome` sem erros
-- [ ] Testar `flutter analyze` sem warnings
-- [ ] Atualizar README com instruções web
