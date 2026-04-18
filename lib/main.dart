@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'screens/root_screen.dart';
 import 'services/animal_service.dart';
 import 'services/sanitary_service.dart';
+import 'services/voice_service.dart';
 import 'theme/app_theme.dart';
 
 void main() {
@@ -18,6 +19,7 @@ class AgrotrilhoApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AnimalService()),
         ChangeNotifierProvider(create: (_) => SanitaryService()),
+        ChangeNotifierProvider(create: (_) => VoiceService()),
       ],
       child: MaterialApp(
         title: 'Agrotrilho',
