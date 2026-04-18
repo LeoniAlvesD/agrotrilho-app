@@ -97,7 +97,7 @@ String? commandToRoute(String command) {
     return '/animais';
   }
   if (command.contains('rastreabilidade') || command.contains('rastrear')) {
-    return '/voz';
+    return '/lotes';
   }
   if (command.contains('sisbov') || command.contains('relatório') ||
       command.contains('relatorio')) {

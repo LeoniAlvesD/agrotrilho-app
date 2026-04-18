@@ -25,7 +25,8 @@ class _RootScreenState extends State<RootScreen> {
   int _selectedIndex = 0;
 
   // Bottom-nav indices (mobile): Home, Lotes, Voz, Ações, Config
-  // Extended nav-rail / drawer also shows: Animais, Scanner, Relatórios, Sanitário
+  // Extended nav-rail / drawer also shows: Animais, Relatórios, Sanitário
+  static const _kMaxNavRailIndex = 7; // inclusive upper bound for 8 screens
   static const _titles = [
     AppStrings.appName, // 0 Home
     'Meus Lotes',       // 1 Lotes
@@ -114,7 +115,7 @@ class _RootScreenState extends State<RootScreen> {
             if (!isMobile)
               NavigationRail(
                 extended: isDesktop,
-                selectedIndex: _selectedIndex.clamp(0, 7),
+                selectedIndex: _selectedIndex.clamp(0, _kMaxNavRailIndex),
                 onDestinationSelected: _onItemSelected,
                 backgroundColor: colorScheme.surface,
                 indicatorColor: colorScheme.primary.withAlpha(30),

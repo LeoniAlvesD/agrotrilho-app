@@ -201,7 +201,7 @@ class _VozScreenState extends State<VozScreen> {
                     onPressed: _toggle,
                     icon: Icon(isListening ? Icons.stop : Icons.mic, size: 26),
                     label: Text(
-                      isListening ? 'Parar' : 'Permitir Microfone',
+                      isListening ? 'Parar' : 'Começar a Ouvir',
                       style: const TextStyle(fontSize: 18),
                     ),
                     style: ElevatedButton.styleFrom(
