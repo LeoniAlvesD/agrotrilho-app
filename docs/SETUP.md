@@ -47,7 +47,7 @@ dependencies:
   web: ^0.5.0
 ```
 
-Em seguida limpe e rebaixe:
+Em seguida limpe e reconstrua:
 
 ```bash
 flutter clean
