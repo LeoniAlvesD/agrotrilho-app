@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
 import '../utils/responsive_helper.dart';
-import '../utils/platform_helper.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/app_bottom_nav.dart';
 import '../widgets/platform_indicator.dart';
-import 'home/dashboard_screen.dart';
+import 'home/home_screen.dart';
+import 'lotes/lotes_screen.dart';
+import 'voz/voz_screen.dart';
+import 'acoes/acoes_screen.dart';
 import 'animais/lista_animais.dart';
 import 'scanner/qr_scanner_screen.dart';
-import 'scanner/nfc_reader_screen.dart';
 import 'relatorios/relatorios_screen.dart';
 import 'sanitary/sanitary_home_screen.dart';
 import 'configuracoes/configuracoes_screen.dart';
@@ -23,36 +24,45 @@ class RootScreen extends StatefulWidget {
 class _RootScreenState extends State<RootScreen> {
   int _selectedIndex = 0;
 
+  // Bottom-nav indices (mobile): Home, Lotes, Voz, Ações, Config
+  // Extended nav-rail / drawer also shows: Animais, Scanner, Relatórios, Sanitário
   static const _titles = [
-    AppStrings.appName,
-    'Animais',
-    'Scanner',
-    'Relatórios',
-    'Controle Sanitário',
-    'Configurações',
+    AppStrings.appName, // 0 Home
+    'Meus Lotes',       // 1 Lotes
+    'Voz',              // 2 Voz
+    'Ações Rápidas',    // 3 Ações
+    'Animais',          // 4 Animais
+    'Relatórios',       // 5 Relatórios
+    'Controle Sanitário', // 6 Sanitário
+    'Configurações',    // 7 Config
   ];
 
   Widget _buildBody() {
     switch (_selectedIndex) {
       case 0:
-        return const DashboardScreen();
+        return const HomeScreen();
       case 1:
-        return const ListaAnimais();
+        return const LotesScreen();
       case 2:
-        return const _ScannerPlaceholder();
+        return const VozScreen();
       case 3:
-        return const RelatoriosScreen();
+        return const AcoesScreen();
       case 4:
-        return const SanitaryHomeScreen();
+        return const ListaAnimais();
       case 5:
+        return const RelatoriosScreen();
+      case 6:
+        return const SanitaryHomeScreen();
+      case 7:
         return const ConfiguracoesScreen();
       default:
-        return const DashboardScreen();
+        return const HomeScreen();
     }
   }
 
   void _onItemSelected(int index) {
-    if (index == 2) {
+    // Index 8 is the "Scanner" shortcut – push as overlay.
+    if (index == 8) {
       _openScanner();
       return;
     }
@@ -74,161 +84,121 @@ class _RootScreenState extends State<RootScreen> {
     final isDesktop = ResponsiveHelper.isDesktop(context);
     final colorScheme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.agriculture, size: 28,
-                semanticLabel: AppStrings.appName),
-            SizedBox(width: AppSpacing.sm),
-            Text(_titles[_selectedIndex]),
+    return RootNav(
+      goTo: _onItemSelected,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.agriculture, size: 28,
+                  semanticLabel: AppStrings.appName),
+              SizedBox(width: AppSpacing.sm),
+              Text(_titles[_selectedIndex]),
+            ],
+          ),
+          automaticallyImplyLeading: isMobile,
+          actions: const [
+            PlatformIndicator(),
+            SizedBox(width: AppSpacing.md),
           ],
         ),
-        automaticallyImplyLeading: isMobile,
-        actions: const [
-          PlatformIndicator(),
-          SizedBox(width: AppSpacing.md),
-        ],
-      ),
-      drawer: isMobile
-          ? AppDrawer(
-              selectedIndex: _selectedIndex,
-              onItemSelected: _onItemSelected,
-            )
-          : null,
-      body: Row(
-        children: [
-          if (!isMobile)
-            NavigationRail(
-              extended: isDesktop,
-              selectedIndex: _selectedIndex,
-              onDestinationSelected: _onItemSelected,
-              backgroundColor: colorScheme.surface,
-              indicatorColor: colorScheme.primary.withAlpha(30),
-              leading: isDesktop
-                  ? Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: AppSpacing.sm),
-                      child: Icon(
-                        Icons.agriculture,
-                        size: 36,
-                        color: colorScheme.primary,
-                        semanticLabel: AppStrings.appName,
-                      ),
-                    )
-                  : null,
-              destinations: const [
-                NavigationRailDestination(
-                  icon: Icon(Icons.dashboard_outlined),
-                  selectedIcon: Icon(Icons.dashboard),
-                  label: Text('Home'),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.pets_outlined),
-                  selectedIcon: Icon(Icons.pets),
-                  label: Text('Animais'),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.qr_code_scanner_outlined),
-                  selectedIcon: Icon(Icons.qr_code_scanner),
-                  label: Text('Scanner'),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.bar_chart_outlined),
-                  selectedIcon: Icon(Icons.bar_chart),
-                  label: Text('Relatórios'),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.health_and_safety_outlined),
-                  selectedIcon: Icon(Icons.health_and_safety),
-                  label: Text('Sanitário'),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.settings_outlined),
-                  selectedIcon: Icon(Icons.settings),
-                  label: Text('Config'),
-                ),
-              ],
-            ),
-          if (!isMobile) const VerticalDivider(thickness: 1, width: 1),
-          Expanded(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              switchInCurve: Curves.easeInOut,
-              switchOutCurve: Curves.easeInOut,
-              transitionBuilder: (child, animation) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-              child: KeyedSubtree(
-                key: ValueKey(_selectedIndex),
-                child: _buildBody(),
+        drawer: isMobile
+            ? AppDrawer(
+                selectedIndex: _selectedIndex,
+                onItemSelected: _onItemSelected,
+              )
+            : null,
+        body: Row(
+          children: [
+            if (!isMobile)
+              NavigationRail(
+                extended: isDesktop,
+                selectedIndex: _selectedIndex.clamp(0, 7),
+                onDestinationSelected: _onItemSelected,
+                backgroundColor: colorScheme.surface,
+                indicatorColor: colorScheme.primary.withAlpha(30),
+                leading: isDesktop
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: AppSpacing.sm),
+                        child: Icon(
+                          Icons.agriculture,
+                          size: 36,
+                          color: colorScheme.primary,
+                          semanticLabel: AppStrings.appName,
+                        ),
+                      )
+                    : null,
+                destinations: const [
+                  NavigationRailDestination(
+                    icon: Icon(Icons.home_outlined),
+                    selectedIcon: Icon(Icons.home),
+                    label: Text('Home'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.layers_outlined),
+                    selectedIcon: Icon(Icons.layers),
+                    label: Text('Lotes'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.mic_none),
+                    selectedIcon: Icon(Icons.mic),
+                    label: Text('Voz'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.bolt_outlined),
+                    selectedIcon: Icon(Icons.bolt),
+                    label: Text('Ações'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.pets_outlined),
+                    selectedIcon: Icon(Icons.pets),
+                    label: Text('Animais'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.bar_chart_outlined),
+                    selectedIcon: Icon(Icons.bar_chart),
+                    label: Text('Relatórios'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.health_and_safety_outlined),
+                    selectedIcon: Icon(Icons.health_and_safety),
+                    label: Text('Sanitário'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.settings_outlined),
+                    selectedIcon: Icon(Icons.settings),
+                    label: Text('Config'),
+                  ),
+                ],
               ),
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: isMobile
-          ? AppBottomNav(
-              currentIndex: _selectedIndex,
-              onTap: _onItemSelected,
-            )
-          : null,
-    );
-  }
-}
-
-class _ScannerPlaceholder extends StatelessWidget {
-  const _ScannerPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.qr_code_scanner,
-            size: 80,
-            color: colorScheme.onSurfaceVariant.withAlpha(80),
-            semanticLabel: 'Scanner QR Code',
-          ),
-          SizedBox(height: AppSpacing.lg),
-          Text(
-            'Toque no botão Scanner para abrir a câmera',
-            style: theme.textTheme.bodyLarge?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-          if (PlatformHelper.supportsNfc) ...[
-            SizedBox(height: AppSpacing.xxl),
-            OutlinedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const NfcReaderScreen()),
-                );
-              },
-              icon: const Icon(Icons.nfc),
-              label: const Text('Abrir Leitor NFC'),
-            ),
-          ],
-          if (PlatformHelper.isWeb) ...[
-            SizedBox(height: AppSpacing.lg),
-            Text(
-              'NFC não disponível em web',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurfaceVariant.withAlpha(140),
+            if (!isMobile) const VerticalDivider(thickness: 1, width: 1),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                switchInCurve: Curves.easeInOut,
+                switchOutCurve: Curves.easeInOut,
+                transitionBuilder: (child, animation) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  );
+                },
+                child: KeyedSubtree(
+                  key: ValueKey(_selectedIndex),
+                  child: _buildBody(),
+                ),
               ),
             ),
           ],
-        ],
+        ),
+        bottomNavigationBar: isMobile
+            ? AppBottomNav(
+                currentIndex: _selectedIndex,
+                onTap: _onItemSelected,
+              )
+            : null,
       ),
     );
   }

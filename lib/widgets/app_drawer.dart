@@ -12,9 +12,11 @@ class AppDrawer extends StatelessWidget {
   });
 
   static const _items = <_DrawerItem>[
-    _DrawerItem(icon: Icons.dashboard, label: 'Home'),
+    _DrawerItem(icon: Icons.home, label: 'Home'),
+    _DrawerItem(icon: Icons.layers, label: 'Lotes'),
+    _DrawerItem(icon: Icons.mic, label: 'Voz'),
+    _DrawerItem(icon: Icons.bolt, label: 'Ações Rápidas'),
     _DrawerItem(icon: Icons.pets, label: 'Animais'),
-    _DrawerItem(icon: Icons.qr_code_scanner, label: 'Scanner'),
     _DrawerItem(icon: Icons.bar_chart, label: 'Relatórios'),
     _DrawerItem(icon: Icons.health_and_safety, label: 'Controle Sanitário'),
     _DrawerItem(icon: Icons.settings, label: 'Configurações'),
