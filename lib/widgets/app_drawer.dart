@@ -16,6 +16,7 @@ class AppDrawer extends StatelessWidget {
     _DrawerItem(icon: Icons.pets, label: 'Animais'),
     _DrawerItem(icon: Icons.qr_code_scanner, label: 'Scanner'),
     _DrawerItem(icon: Icons.bar_chart, label: 'Relatórios'),
+    _DrawerItem(icon: Icons.health_and_safety, label: 'Controle Sanitário'),
     _DrawerItem(icon: Icons.settings, label: 'Configurações'),
   ];
 
