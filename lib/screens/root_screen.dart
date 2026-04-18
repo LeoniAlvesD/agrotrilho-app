@@ -10,6 +10,7 @@ import 'animais/lista_animais.dart';
 import 'scanner/qr_scanner_screen.dart';
 import 'scanner/nfc_reader_screen.dart';
 import 'relatorios/relatorios_screen.dart';
+import 'sanitary/sanitary_home_screen.dart';
 import 'configuracoes/configuracoes_screen.dart';
 
 class RootScreen extends StatefulWidget {
@@ -27,6 +28,7 @@ class _RootScreenState extends State<RootScreen> {
     'Animais',
     'Scanner',
     'Relatórios',
+    'Controle Sanitário',
     'Configurações',
   ];
 
@@ -41,6 +43,8 @@ class _RootScreenState extends State<RootScreen> {
       case 3:
         return const RelatoriosScreen();
       case 4:
+        return const SanitaryHomeScreen();
+      case 5:
         return const ConfiguracoesScreen();
       default:
         return const DashboardScreen();
@@ -134,6 +138,11 @@ class _RootScreenState extends State<RootScreen> {
                   icon: Icon(Icons.bar_chart_outlined),
                   selectedIcon: Icon(Icons.bar_chart),
                   label: Text('Relatórios'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.health_and_safety_outlined),
+                  selectedIcon: Icon(Icons.health_and_safety),
+                  label: Text('Sanitário'),
                 ),
                 NavigationRailDestination(
                   icon: Icon(Icons.settings_outlined),

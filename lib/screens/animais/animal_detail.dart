@@ -3,9 +3,11 @@ import 'package:provider/provider.dart';
 import '../../models/animal.dart';
 import '../../services/animal_service.dart';
 import '../../services/qrcode_service.dart';
+import '../../services/sanitary_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/responsive_helper.dart';
 import '../../widgets/qr_display_widget.dart';
+import '../sanitary/sanitary_animal_detail_screen.dart';
 import 'animal_form.dart';
 
 class AnimalDetail extends StatelessWidget {
@@ -113,6 +115,8 @@ class AnimalDetail extends StatelessWidget {
                 ],
                 QrDisplayWidget(data: QrCodeService.gerarDados(animal)),
                 SizedBox(height: AppSpacing.lg),
+                _buildSanitaryButton(context),
+                SizedBox(height: AppSpacing.lg),
               ],
             ),
           ),
@@ -189,6 +193,56 @@ class AnimalDetail extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSanitaryButton(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final count =
+        context.watch<SanitaryService>().contarPorAnimal(animal.id);
+
+    return OutlinedButton.icon(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                SanitaryAnimalDetailScreen(animal: animal),
+          ),
+        );
+      },
+      icon: const Icon(Icons.health_and_safety_outlined),
+      label: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text('Controle Sanitário'),
+          if (count > 0) ...[
+            SizedBox(width: AppSpacing.sm),
+            Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm, vertical: 2),
+              decoration: BoxDecoration(
+                color: colorScheme.primary,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '$count',
+                style: TextStyle(
+                  color: colorScheme.onPrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+      style: OutlinedButton.styleFrom(
+        minimumSize: const Size(double.infinity, 52),
+        side: BorderSide(color: colorScheme.primary),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14)),
       ),
     );
   }

@@ -45,6 +45,13 @@ class AppBottomNav extends StatelessWidget {
           tooltip: 'Ver relatórios',
         ),
         NavigationDestination(
+          icon: const Icon(Icons.health_and_safety_outlined),
+          selectedIcon:
+              Icon(Icons.health_and_safety, color: colorScheme.primary),
+          label: 'Sanitário',
+          tooltip: 'Controle sanitário',
+        ),
+        NavigationDestination(
           icon: const Icon(Icons.settings_outlined),
           selectedIcon: Icon(Icons.settings, color: colorScheme.primary),
           label: 'Config',
