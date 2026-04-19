@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../services/animal_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/responsive_helper.dart';
+import '../../utils/ui_scale.dart';
 import '../../widgets/metric_card.dart';
 import '../../widgets/voice_command_help.dart';
 import '../animais/animal_form.dart';
@@ -39,7 +40,7 @@ class HomeScreen extends StatelessWidget {
               // ── Greeting banner ────────────────────────────────────────
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(UiScale.bannerPadding(context)),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -49,12 +50,12 @@ class HomeScreen extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
                       color: colorScheme.primary.withAlpha(60),
-                      blurRadius: 16,
-                      offset: const Offset(0, 6),
+                      blurRadius: 14,
+                      offset: const Offset(0, 5),
                     ),
                   ],
                 ),
@@ -66,14 +67,15 @@ class HomeScreen extends StatelessWidget {
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w800,
-                        fontSize: 22,
+                        fontSize: UiScale.fontXl(context),
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 4),
                     Text(
                       'Resumo do seu rebanho hoje',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: Colors.white.withAlpha(220),
+                        fontSize: UiScale.fontSm(context),
                       ),
                     ),
                   ],
@@ -103,15 +105,16 @@ class HomeScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: () => _abrirCadastro(context, service),
-                  icon: const Icon(Icons.add, size: 24),
-                  label: const Text(
+                  icon: const Icon(Icons.add, size: 22),
+                  label: Text(
                     'Cadastrar Novo Animal',
-                    style: TextStyle(fontSize: 17),
+                    style: TextStyle(fontSize: UiScale.fontMd(context)),
                   ),
                   style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: EdgeInsets.symmetric(
+                        vertical: UiScale.buttonPadding(context)),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(14),
                     ),
                   ),
                 ),
@@ -284,7 +287,8 @@ class _MetricsGrid extends StatelessWidget {
     ];
 
     final isMobile = ResponsiveHelper.isMobile(context);
-    final columns = isMobile ? 1 : 3;
+    final isTablet = ResponsiveHelper.isTablet(context);
+    final columns = isMobile ? 1 : isTablet ? 2 : 3;
 
     if (columns == 1) {
       return Column(
@@ -294,6 +298,29 @@ class _MetricsGrid extends StatelessWidget {
                   child: c,
                 ))
             .toList(),
+      );
+    }
+
+    if (columns == 2) {
+      return Column(
+        children: [
+          Row(
+            children: cards.take(2).map((c) => Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: c,
+                  ),
+                )).toList(),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: cards[2],
+            ),
+          ),
+        ],
       );
     }
 
@@ -345,12 +372,12 @@ class _QuickAccessGrid extends StatelessWidget {
     ];
 
     return GridView.count(
-      crossAxisCount: 2,
+      crossAxisCount: ResponsiveHelper.isMobile(context) ? 2 : 4,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      childAspectRatio: 2.2,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      childAspectRatio: ResponsiveHelper.isMobile(context) ? 2.0 : 2.6,
       children: items.map((item) => _QuickCard(item: item)).toList(),
     );
   }
@@ -388,7 +415,7 @@ class _QuickCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: item.color.withAlpha(60)),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Row(
           children: [
             Icon(item.icon, color: item.color, size: 26),
