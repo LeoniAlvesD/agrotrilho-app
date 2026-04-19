@@ -20,24 +20,24 @@ class UiScale {
 
   /// Vertical padding for primary action buttons.
   static double buttonPadding(BuildContext c) =>
-      ResponsiveHelper.isMobile(c) ? 12 : 14;
+      ResponsiveHelper.isMobile(c) ? 12 : ResponsiveHelper.isTablet(c) ? 13 : 14;
 
   static double fontSm(BuildContext c) =>
-      ResponsiveHelper.isMobile(c) ? 12 : 13;
+      ResponsiveHelper.isMobile(c) ? 12 : ResponsiveHelper.isTablet(c) ? 13 : 14;
 
   static double fontMd(BuildContext c) =>
-      ResponsiveHelper.isMobile(c) ? 14 : 16;
+      ResponsiveHelper.isMobile(c) ? 14 : ResponsiveHelper.isTablet(c) ? 15 : 16;
 
   static double fontLg(BuildContext c) =>
-      ResponsiveHelper.isMobile(c) ? 16 : 18;
+      ResponsiveHelper.isMobile(c) ? 16 : ResponsiveHelper.isTablet(c) ? 17 : 18;
 
   /// Extra-large font, used for headline values inside cards.
   static double fontXl(BuildContext c) =>
-      ResponsiveHelper.isMobile(c) ? 18 : 20;
+      ResponsiveHelper.isMobile(c) ? 18 : ResponsiveHelper.isTablet(c) ? 19 : 20;
 
   static double inputHeight(BuildContext c) =>
-      ResponsiveHelper.isMobile(c) ? 44 : 48;
+      ResponsiveHelper.isMobile(c) ? 44 : ResponsiveHelper.isTablet(c) ? 46 : 48;
 
   static double cardPadding(BuildContext c) =>
-      ResponsiveHelper.isMobile(c) ? 12 : 16;
+      ResponsiveHelper.isMobile(c) ? 12 : ResponsiveHelper.isTablet(c) ? 14 : 16;
 }
