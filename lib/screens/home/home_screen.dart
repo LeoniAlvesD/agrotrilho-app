@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
               // ── Greeting banner ────────────────────────────────────────
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(UiScale.cardPadding(context) + 4),
+                padding: EdgeInsets.all(UiScale.bannerPadding(context)),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -67,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w800,
-                        fontSize: UiScale.fontLg(context) + 2,
+                        fontSize: UiScale.fontXl(context),
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -112,7 +112,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(
-                        vertical: UiScale.gap(context) + 4),
+                        vertical: UiScale.buttonPadding(context)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),

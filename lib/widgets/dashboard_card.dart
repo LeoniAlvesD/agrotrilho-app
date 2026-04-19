@@ -63,7 +63,7 @@ class _DashboardCardState extends State<DashboardCard> {
                     widget.value,
                     style: theme.textTheme.headlineSmall?.copyWith(
                       color: cardColor,
-                      fontSize: UiScale.fontLg(context) + 2,
+                      fontSize: UiScale.fontXl(context),
                     ),
                   ),
                   SizedBox(height: AppSpacing.xs),
