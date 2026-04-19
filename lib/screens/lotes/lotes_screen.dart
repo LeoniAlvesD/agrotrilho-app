@@ -50,6 +50,12 @@ class _LotesScreenState extends State<LotesScreen> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Gestão de Lotes'),
+        backgroundColor: const Color(0xFF6A1B9A),
+        foregroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         padding: ResponsiveHelper.getPadding(context),
         child: Column(
