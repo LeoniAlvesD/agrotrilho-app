@@ -4,6 +4,7 @@ import '../../models/animal.dart';
 import '../../services/animal_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/responsive_helper.dart';
+import '../../utils/ui_scale.dart';
 import '../../widgets/stats_card.dart';
 import '../../widgets/stat_widget.dart';
 
@@ -47,57 +48,93 @@ class RelatoriosScreen extends StatelessWidget {
                 AppStrings.relatoriosSubtitulo,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: colorScheme.onSurfaceVariant,
+                  fontSize: UiScale.fontMd(context),
                 ),
               ),
               SizedBox(height: AppSpacing.xl),
-              StatsCard(
-                title: AppStrings.resumoGeral,
-                children: [
-                  _buildSummaryRow(
-                    context,
-                    AppStrings.totalAnimais,
-                    '$total',
-                    Icons.pets,
+              if (ResponsiveHelper.isMobile(context)) ...[
+                StatsCard(
+                  title: AppStrings.resumoGeral,
+                  children: [
+                    _buildSummaryRow(context, AppStrings.totalAnimais,
+                        '$total', Icons.pets),
+                    _buildSummaryRow(context, AppStrings.pesoTotal,
+                        '${pesoTotal.toStringAsFixed(1)} kg',
+                        Icons.monitor_weight),
+                    _buildSummaryRow(context, 'Peso Médio',
+                        '${pesoMedio.toStringAsFixed(1)} kg', Icons.scale),
+                    _buildSummaryRow(context, AppStrings.idadeMedia,
+                        '${idadeMedia.toStringAsFixed(1)} meses',
+                        Icons.calendar_today),
+                  ],
+                ),
+                if (animais.isNotEmpty) ...[
+                  SizedBox(height: AppSpacing.lg),
+                  StatsCard(
+                    title: AppStrings.distribuicaoPeso,
+                    children: animais
+                        .map((a) => StatWidget(
+                              label: a.nome,
+                              value: '${a.peso} kg',
+                              fraction: a.peso / maxPeso,
+                              color: colorScheme.primary,
+                            ))
+                        .toList(),
                   ),
-                  _buildSummaryRow(
-                    context,
-                    AppStrings.pesoTotal,
-                    '${pesoTotal.toStringAsFixed(1)} kg',
-                    Icons.monitor_weight,
-                  ),
-                  _buildSummaryRow(
-                    context,
-                    'Peso Médio',
-                    '${pesoMedio.toStringAsFixed(1)} kg',
-                    Icons.scale,
-                  ),
-                  _buildSummaryRow(
-                    context,
-                    AppStrings.idadeMedia,
-                    '${idadeMedia.toStringAsFixed(1)} meses',
-                    Icons.calendar_today,
+                  SizedBox(height: AppSpacing.lg),
+                  StatsCard(
+                    title: AppStrings.distribuicaoIdade,
+                    children: _buildIdadeStats(animais),
                   ),
                 ],
-              ),
-              SizedBox(height: AppSpacing.lg),
-              if (animais.isNotEmpty) ...[
-                StatsCard(
-                  title: AppStrings.distribuicaoPeso,
-                  children: animais
-                      .map(
-                        (a) => StatWidget(
-                          label: a.nome,
-                          value: '${a.peso} kg',
-                          fraction: a.peso / maxPeso,
-                          color: colorScheme.primary,
+              ] else ...[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: StatsCard(
+                        title: AppStrings.resumoGeral,
+                        children: [
+                          _buildSummaryRow(context, AppStrings.totalAnimais,
+                              '$total', Icons.pets),
+                          _buildSummaryRow(context, AppStrings.pesoTotal,
+                              '${pesoTotal.toStringAsFixed(1)} kg',
+                              Icons.monitor_weight),
+                          _buildSummaryRow(context, 'Peso Médio',
+                              '${pesoMedio.toStringAsFixed(1)} kg',
+                              Icons.scale),
+                          _buildSummaryRow(context, AppStrings.idadeMedia,
+                              '${idadeMedia.toStringAsFixed(1)} meses',
+                              Icons.calendar_today),
+                        ],
+                      ),
+                    ),
+                    if (animais.isNotEmpty) ...[
+                      SizedBox(width: AppSpacing.lg),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            StatsCard(
+                              title: AppStrings.distribuicaoPeso,
+                              children: animais
+                                  .map((a) => StatWidget(
+                                        label: a.nome,
+                                        value: '${a.peso} kg',
+                                        fraction: a.peso / maxPeso,
+                                        color: colorScheme.primary,
+                                      ))
+                                  .toList(),
+                            ),
+                            SizedBox(height: AppSpacing.lg),
+                            StatsCard(
+                              title: AppStrings.distribuicaoIdade,
+                              children: _buildIdadeStats(animais),
+                            ),
+                          ],
                         ),
-                      )
-                      .toList(),
-                ),
-                SizedBox(height: AppSpacing.lg),
-                StatsCard(
-                  title: AppStrings.distribuicaoIdade,
-                  children: _buildIdadeStats(animais),
+                      ),
+                    ],
+                  ],
                 ),
               ],
               if (animais.isEmpty)

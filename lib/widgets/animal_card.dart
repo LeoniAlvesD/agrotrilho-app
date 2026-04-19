@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/animal.dart';
 import '../utils/constants.dart';
+import '../utils/ui_scale.dart';
 
 class AnimalCard extends StatefulWidget {
   final Animal animal;
@@ -22,7 +23,8 @@ class _AnimalCardState extends State<AnimalCard> {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-          vertical: AppSpacing.xs, horizontal: AppSpacing.md),
+          vertical: AppSpacing.xs,
+          horizontal: UiScale.padding(context)),
       child: Semantics(
         label:
             '${widget.animal.nome}, ${widget.animal.peso} kg, ${widget.animal.idade} ${widget.animal.idade == 1 ? 'mês' : 'meses'}',
@@ -36,36 +38,39 @@ class _AnimalCardState extends State<AnimalCard> {
               onTap: widget.onTap,
               onHighlightChanged: (v) => setState(() => _pressed = v),
               child: Padding(
-                padding: EdgeInsets.all(AppSpacing.md),
+                padding: EdgeInsets.all(UiScale.cardPadding(context)),
                 child: Row(
                   children: [
                     Container(
-                      width: 56,
-                      height: 56,
+                      width: 48,
+                      height: 48,
                       decoration: BoxDecoration(
                         color: colorScheme.primary.withAlpha(25),
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
                         Icons.pets,
                         color: colorScheme.primary,
-                        size: 32,
+                        size: 28,
                       ),
                     ),
-                    SizedBox(width: AppSpacing.lg),
+                    SizedBox(width: UiScale.gap(context)),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             widget.animal.nome,
-                            style: theme.textTheme.titleMedium,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontSize: UiScale.fontMd(context),
+                            ),
                           ),
                           SizedBox(height: AppSpacing.xs),
                           Text(
                             '${widget.animal.peso} kg  •  ${widget.animal.idade} ${widget.animal.idade == 1 ? 'mês' : 'meses'}',
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: colorScheme.onSurfaceVariant,
+                              fontSize: UiScale.fontSm(context),
                             ),
                           ),
                         ],

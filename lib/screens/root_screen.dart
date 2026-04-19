@@ -89,13 +89,19 @@ class _RootScreenState extends State<RootScreen> {
       goTo: _onItemSelected,
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: isMobile ? 52 : 60,
+          titleSpacing: isMobile ? 4 : NavigationToolbar.kMiddleSpacing,
           title: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.agriculture, size: 28,
+              Icon(Icons.agriculture,
+                  size: isMobile ? 22 : 28,
                   semanticLabel: AppStrings.appName),
               SizedBox(width: AppSpacing.sm),
-              Text(_titles[_selectedIndex]),
+              Text(
+                _titles[_selectedIndex],
+                style: TextStyle(fontSize: isMobile ? 16 : 20),
+              ),
             ],
           ),
           automaticallyImplyLeading: isMobile,

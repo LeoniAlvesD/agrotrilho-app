@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../utils/constants.dart';
+import '../utils/ui_scale.dart';
 
 class DashboardCard extends StatefulWidget {
   final IconData icon;
@@ -44,24 +45,25 @@ class _DashboardCardState extends State<DashboardCard> {
             onTap: widget.onTap,
             onHighlightChanged: (v) => setState(() => _pressed = v),
             child: Padding(
-              padding: EdgeInsets.all(AppSpacing.lg),
+              padding: EdgeInsets.all(UiScale.cardPadding(context)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: 48,
-                    height: 48,
+                    width: 44,
+                    height: 44,
                     decoration: BoxDecoration(
                       color: cardColor.withAlpha(25),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(widget.icon, color: cardColor, size: 24),
+                    child: Icon(widget.icon, color: cardColor, size: 22),
                   ),
-                  SizedBox(height: AppSpacing.md),
+                  SizedBox(height: UiScale.gap(context)),
                   Text(
                     widget.value,
                     style: theme.textTheme.headlineSmall?.copyWith(
                       color: cardColor,
+                      fontSize: UiScale.fontLg(context) + 2,
                     ),
                   ),
                   SizedBox(height: AppSpacing.xs),
@@ -69,6 +71,7 @@ class _DashboardCardState extends State<DashboardCard> {
                     widget.title,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurfaceVariant,
+                      fontSize: UiScale.fontSm(context),
                     ),
                   ),
                 ],
